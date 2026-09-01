@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1,user-scalable=no"/>
+<title>小学生字词错题本</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{background:#f4faf9;color:#222;padding-bottom:90px}
+.container{padding:20px;max-width:600px;margin:0 auto}
+.greet{margin:12px 0 20px}
+.greet h2{font-size:26px;font-weight:600}
+.greet .date{color:#777;margin-top:4px}
+/* 今日待复习卡片 */
+.card-today{background:#32b8a1;border-radius:20px;padding:24px;color:#fff;position:relative;margin-bottom:16px}
+.card-today .title{opacity:0.9;font-size:16px}
+.card-today .num{font-size:48px;font-weight:bold;margin:8px 0}
+.card-today .tip{opacity:0.85;font-size:14px}
+.card-today .icon-book{position:absolute;right:20px;top:24px;width:52px;height:52px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.btn-today{width:100%;background:rgba(255,255,255,0.22);border:0;border-radius:12px;color:#fff;padding:14px;font-size:17px;margin-top:20px}
+.row-two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.small-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 6px #00000008}
+.small-card .label{font-size:15px;color:#666}
+.small-card .val{font-size:32px;font-weight:bold;margin-top:6px}
+.small-card.add{display:flex;gap:12px;align-items:center}
+.small-card.add .icon{width:42px;height:42px;background:#e6f7f4;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#32b8a1;font-size:20px}
+.small-card.add .text h4{font-size:17px}
+.small-card.add .text p{font-size:14px;color:#777;margin-top:2px}
+.data-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 6px #00000008;margin-bottom:16px}
+.data-card h4{font-size:17px;margin-bottom:6px}
+.data-card p.desc{font-size:14px;color:#777;margin-bottom:16px}
+.btns-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-outline{border:1px solid #ccc;background:#fff;border-radius:12px;padding:12px;font-size:16px}
+.tip-box{background:#e8f7f3;border-radius:16px;padding:18px;color:#208c79}
+.tip-box h4{display:flex;gap:6px;align-items:center;font-size:16px;margin-bottom:6px}
+.tip-box p{font-size:14px;line-height:1.6}
+/* 底部导航 */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px 10px;box-shadow:0 -1px 6px #00000008}
+.nav-item{text-align:center;padding:6px;cursor:pointer;color:#999;font-size:12px}
+.nav-item.active{color:#32b8a1}
+.nav-item .icon{font-size:22px;margin-bottom:4px}
+.page{display:none}
+.page.active{display:block}
+input,select{width:100%;padding:14px;border:1px solid #e2e8e7;border-radius:12px;font-size:16px;margin:10px 0;background:#fff}
+.word-item{background:#fff;border-radius:14px;padding:16px;margin:10px 0;box-shadow:0 1px 4px #00000006}
+.today-mark{color:#e54848;font-weight:bold}
+.btn{padding:13px;border-radius:12px;border:none;font-size:16px;cursor:pointer;margin:6px 0}
+.btn-primary{background:#32b8a1;color:#fff}
+.btn-gray{background:#eee}
+.search-input{margin-bottom:12px}
+#canvas{width:100%}
+</style>
+</head>
+<body>
+<div id="page-home" class="page active">
+<div class="container">
+<div class="greet">
+<h2>你好呀 👋</h2>
+<div class="date" id="curDate"></div>
+</div>
+<div class="card-today">
+<div class="title">今日待复习</div>
+<div class="num"><span id="todoCnt">0</span> 个</div>
+<div class="tip" id="todayTip">今天没有复习任务，棒棒哒！</div>
+<div class="icon-book">📖</div>
+<button class="btn-today" onclick="switchTab('review')">暂无复习</button>
+</div>
+<div class="row-two">
+<div class="small-card">
+<div class="label">总收录词数</div>
+<div class="val" id="totalWord">0</div>
+</div>
+<div class="small-card add" onclick="switchTab('add')">
+<div class="icon">➕</div>
+<div class="text">
+<h4>快速录入</h4>
+<p>添加错别字</p>
+</div>
+</div>
+</div>
+<div class="data-card">
+<h4>数据管理</h4>
+<p class="desc">导出备份，防止数据丢失</p>
+<div class="btns-row">
+<button class="btn-outline" onclick="exportJson()">⬇ 导出 JSON</button>
+<button class="btn-outline" onclick="document.getElementById('importFile').click()">⬆ 导入 JSON</button>
+<input type="file" id="importFile" accept=".json" style="display:none">
+</div>
+</div>
+<div class="tip-box">
+<h4>💡 复习小贴士</h4>
+<p>按照艾宾浩斯记忆曲线安排复习，坚持 30 天就能牢牢记住字词啦！</p>
+</div>
+</div>
+</div>
+<!--录入页-->
+<div id="page-add" class="page">
+<div class="container">
+<h2 style="margin:20px 0">录入易错字词</h2>
+<input placeholder="正确词语" id="inpWord">
+<input placeholder="拼音" id="inpPinyin">
+<input placeholder="写错成（选填）" id="inpWrong">
+<select id="selErrType">
+<option value="形近字">形近字</option>
+<option value="同音字">同音字</option>
+<option value="漏笔画">漏笔画</option>
+<option value="其他">其他</option>
+</select>
+<button class="btn btn-primary" onclick="saveWord()">保存词条</button>
+</div>
+</div>
+<!--复习页-->
+<div id="page-review" class="page">
+<div class="container">
+<h2 style="margin:20px 0">今日复习</h2>
+<div id="reviewWrap"></div>
+<div id="reviewPanel" style="display:none;text-align:center">
+<div style="font-size:28px;margin:30px 0" id="revPinyin"></div>
+<input placeholder="请写出词语" id="revAns">
+<button class="btn btn-primary" onclick="knowIt()">✅记住了</button>
+<button class="btn btn-gray" onclick="notKnow()">❌还没记住</button>
+<br>
+<button class="btn btn-gray" onclick="switchTab('home')">返回首页</button>
+</div>
+</div>
+</div>
+<!--词库页-->
+<div id="page-wordlib" class="page">
+<div class="container">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2>词库</h2>
+<button class="btn-outline" onclick="exportJson()">导出备份</button>
+</div>
+<input class="search-input" placeholder="搜索词语 / 拼音 /错字" id="searchKey">
+<div id="wordListWrap"></div>
+</div>
+</div>
+<!--统计页-->
+<div id="page-stat" class="page">
+<div class="container">
+<h2 style="margin:20px 0">统计</h2>
+<div class="small-card">
+<div class="label">总词条数量</div>
+<div class="val" id="statTotal">0</div>
+</div>
+<h3 style="margin:20px 0 8px">出错最多前5条</h3>
+<div id="top5Wrap"></div>
+</div>
+</div>
+<!--底部导航-->
+<div class="bottom-nav">
+<div class="nav-item active" data-page="home" onclick="switchTab('home')">
+<div class="icon">🏠</div>
+<div>首页</div>
+</div>
+<div class="nav-item" data-page="add" onclick="switchTab('add')">
+<div class="icon">➕</div>
+<div>录入</div>
+</div>
+<div class="nav-item" data-page="review" onclick="switchTab('review')">
+<div class="icon">📖</div>
+<div>复习</div>
+</div>
+<div class="nav-item" data-page="wordlib" onclick="switchTab('wordlib')">
+<div class="icon">📃</div>
+<div>词库</div>
+</div>
+<div class="nav-item" data-page="stat" onclick="switchTab('stat')">
+<div class="icon">📊</div>
+<div>统计</div>
+</div>
+</div>
+<script>
+const intervals = [1,2,4,7,15,30];
+let wordList = JSON.parse(localStorage.getItem("wordBook")) || [];
+let todayReview = [];
+let curRevIdx = 0;
+//日期
+const now=new Date();
+document.getElementById("curDate").innerText = `${now.getMonth()+1}月${now.getDate()}日，周${'一二三四五六日'[now.getDay()]}`;
+function saveStorage(){
+ localStorage.setItem("wordBook",JSON.stringify(wordList));
+}
+function switchTab(pageName){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById("page-"+pageName).classList.add("active");
+ document.querySelectorAll(".nav-item").forEach(nav=>{
+   nav.classList.toggle("active", nav.dataset.page === pageName);
+ })
+ refreshPage(pageName);
+}
+function refreshPage(p){
+ if(p==="home") refreshHome();
+ if(p==="review") refreshReview();
+ if(p==="wordlib") renderWordLib();
+ if(p==="stat") renderStat();
+}
+function getTodayList(){
+ const day = new Date();day.setHours(0,0,0,0);
+ const ts = day.getTime();
+ return wordList.filter(i=> new Date(i.nextReview).getTime() <= ts);
+}
+function refreshHome(){
+ const tod = getTodayList();
+ document.getElementById("todoCnt").innerText = tod.length;
+ document.getElementById("totalWord").innerText = wordList.length;
+ if(tod.length>0){
+   document.getElementById("todayTip").innerText = "抓紧时间复习吧！";
+ }else{
+   document.getElementById("todayTip").innerText = "今天没有复习任务，棒棒哒！";
+ }
+}
+function saveWord(){
+ const w = document.getElementById("inpWord").value.trim();
+ const py = document.getElementById("inpPinyin").value.trim();
+ const wr = document.getElementById("inpWrong").value.trim();
+ const tp = document.getElementById("selErrType").value;
+ if(!w||!py){alert("词语和拼音不能为空");return;}
+ wordList.push({
+   word:w,pinyin:py,wrongText:wr,errType:tp,
+   level:0,failCount:0,createTime:new Date().toISOString(),
+   nextReview:new Date(Date.now()+1*24*3600*1000).toISOString()
+ })
+ saveStorage();
+ alert("添加成功");
+ document.getElementById("inpWord").value="";
+ document.getElementById("inpPinyin").value="";
+ document.getElementById("inpWrong").value="";
+ switchTab("home");
+}
+function refreshReview(){
+ todayReview = getTodayList();
+ if(todayReview.length===0){
+   document.getElementById("reviewWrap").innerHTML="<div style='text-align:center;padding:40px;color:#777'>今日暂无复习任务🎉</div>";
+   document.getElementById("reviewPanel").style.display="none";
+   return;
+ }
+ curRevIdx=0;
+ document.getElementById("reviewWrap").innerHTML="";
+ document.getElementById("reviewPanel").style.display="block";
+ showRevItem();
+}
+function showRevItem(){
+ if(curRevIdx>=todayReview.length){
+   alert("✅今日复习全部完成！");
+   switchTab("home");
+   return;
+ }
+ const item = todayReview[curRevIdx];
+ document.getElementById("revPinyin").innerText = item.pinyin;
+ document.getElementById("revAns").value="";
+}
+function knowIt(){
+ const it = todayReview[curRevIdx];
+ it.level = Math.min(it.level+1, intervals.length-1);
+ const d = intervals[it.level];
+ it.nextReview = new Date(Date.now()+d*24*3600*1000).toISOString();
+ saveStorage();
+ curRevIdx++;showRevItem();
+}
+function notKnow(){
+ const it = todayReview[curRevIdx];
+ it.level=0;it.failCount++;
+ it.nextReview = new Date(Date.now()+1*24*3600*1000).toISOString();
+ saveStorage();
+ curRevIdx++;showRevItem();
+}
+function renderWordLib(){
+ const kw = document.getElementById("searchKey").value.trim().toLowerCase();
+ let arr = wordList;
+ if(kw){
+   arr = wordList.filter(x=>x.word.toLowerCase().includes(kw)||x.pinyin.toLowerCase().includes(kw)||x.wrongText.toLowerCase().includes(kw))
+ }
+ const todayTs = new Date().setHours(0,0,0,0);
+ let html="";
+ arr.forEach((item,idx)=>{
+   const nextTs = new Date(item.nextReview).setHours(0,0,0,0);
+   const diff = Math.ceil((nextTs-todayTs)/(24*3600*1000));
+   let dayTip;
+   if(nextTs <= todayTs) dayTip = `<span class="today-mark">👉今天需要复习</span>`;
+   else dayTip = `距离下次复习 ${diff} 天`;
+   html += `<div class="word-item">
+<div><strong>${item.word}</strong>【${item.pinyin}】</div>
+<div style="font-size:14px;color:#666;margin:4px 0">错写：${item.wrongText||"无"}｜类型：${item.errType}</div>
+<div style="font-size:14px;color:#666">档位：${item.level}｜出错次数：${item.failCount}｜${dayTip}</div>
+</div>`;
+ })
+ if(!html) html="<div style='text-align:center;padding:30px;color:#888'>暂无词条或搜索无结果</div>";
+ document.getElementById("wordListWrap").innerHTML = html;
+}
+document.getElementById("searchKey").oninput = renderWordLib;
+function renderStat(){
+ document.getElementById("statTotal").innerText = wordList.length;
+ const top5 = [...wordList].sort((a,b)=>b.failCount - a.failCount).slice(0,5);
+ let h="";
+ top5.forEach(x=> h+=`<div class="word-item">${x.word}，出错 ${x.failCount} 次</div>`);
+ document.getElementById("top5Wrap").innerHTML = h || "<div style='color:#777'>暂无错题记录</div>";
+}
+//导入导出
+function exportJson(){
+ const blob = new Blob([JSON.stringify(wordList,null,2)],{type:"application/json"});
+ const a = document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="字词错题本备份.json";
+ a.click();URL.revokeObjectURL(a.href);
+}
+document.getElementById("importFile").onchange = function(e){
+ const f = e.target.files[0];if(!f)return;
+ const r = new FileReader();
+ r.onload = ev=>{
+   try{
+     const data = JSON.parse(ev.target.result);
+     let add=0;
+     data.forEach(newItem=>{
+       const exist = wordList.some(old=>old.word===newItem.word&&old.pinyin===newItem.pinyin);
+       if(!exist){wordList.push(newItem);add++;}
+     })
+     saveStorage();alert(`导入成功，新增${add}条词条`);refreshHome();
+   }catch(err){alert("解析失败，请确认备份文件");}
+ }
+ r.readAsText(f);
+}
+refreshHome();
+</script>
+</body>
+</html>
