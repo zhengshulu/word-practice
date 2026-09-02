@@ -71,7 +71,7 @@ input[type="file"]{display:none}
 <body>
 <div class="container">
 <div id="page-home" class="page active">
-  <h2>你好呀 👋</h2>
+  <h2>🦜小和尚鹦鹉贝儿,你好呀 👋</h2>
   <div class="sub-title" id="homeDate"></div>
   <div class="card-green">
     <div style="font-size:18px;opacity:0.9">今日待复习</div>
@@ -91,7 +91,7 @@ input[type="file"]{display:none}
   </div>
   <div class="card">
     <h3>批量纸笔复习说明</h3>
-    <div class="tip">全部待复习词语一次性列出；孩子本子写完全部再批改，逐行点答对/答错；全部标记完成后统一保存SRS间隔。</div>
+    <div class="tip">全部待复习词语一次性列出；孩子本子写完全部；家长批改，逐行点答对/答错；全部标记完成后统一保存SRS间隔。</div>
     <button class="btn-green" onclick="switchPage('review')" style="width:100%;margin-top:8px">开始批量复习</button>
   </div>
 </div>
@@ -132,14 +132,13 @@ input[type="file"]{display:none}
     <h3>批量粘贴导入词语</h3>
     <div class="tip">格式一（完整词条）：词语|拼音|释义|例句<br>格式二（仅词语）：一行只写词语<br>示例：<br>衣裳|yī shang|衣服|春天换上漂亮的yī shang。<br>拘束</div>
     <textarea id="batchText" placeholder="衣裳|yī shang|衣服|春天换上漂亮的yī shang。
-拘束|jū shù|过分约束自己，显得不自然|他站在台下有些jū shù。
-稍微"></textarea>
+拘束"></textarea>
     <button class="btn-green" onclick="batchAddWords()" style="margin-top:10px">批量添加</button>
   </div>
 
   <div class="card">
     <h3>备份导入导出</h3>
-    <div class="tip">JSON字段：word,pinyin,meaning,example,wrongText,level…支持例句导入导出</div>
+    <div class="tip">JSON字段：word,pinyin,meaning,example,wrongText…导入更新已有词条时保留复习时间、level等SRS状态</div>
     <div class="btn-row">
       <button class="btn-outline" onclick="exportJson()">⬇️导出 JSON</button>
       <label class="file-label">⬆️导入 JSON
@@ -257,6 +256,7 @@ input[type="file"]{display:none}
 
 <script>
 const STORAGE_KEY = "wordReviewData";
+const META_KEY = "wordReviewMeta";
 let wordList = [];
 let batchReviewItems = [];
 let todayDoneCount = 0;
@@ -293,12 +293,32 @@ document.querySelectorAll(".nav-item").forEach(item=>{
   item.onclick = ()=>switchPage(item.dataset.page);
 })
 
+function saveMeta(){
+  const meta = {
+    date:getTodayStrCN(),
+    todayDoneCount:todayDoneCount
+  }
+  localStorage.setItem(META_KEY, JSON.stringify(meta));
+}
+
 function loadData(){
   const raw = localStorage.getItem(STORAGE_KEY);
   if(raw) wordList = JSON.parse(raw);
   wordList.forEach(it=>{
     if(it.example === undefined) it.example = "";
   })
+  const metaRaw = localStorage.getItem(META_KEY);
+  if(metaRaw){
+    const meta = JSON.parse(metaRaw);
+    if(meta.date !== getTodayStrCN()){
+      todayDoneCount = 0;
+      saveMeta();
+    }else{
+      todayDoneCount = meta.todayDoneCount || 0;
+    }
+  }else{
+    todayDoneCount = 0;
+  }
   document.getElementById("homeDate").innerText = getTodayStrCN();
   refreshUI();
 }
@@ -309,6 +329,7 @@ function saveData(){
 
 function refreshUI(){
   document.getElementById("totalCount").innerText = wordList.length;
+  document.getElementById("statTotal").innerText = wordList.length;
   const needReview = getDueWords();
   document.getElementById("todayCount").innerText = needReview.length;
   document.getElementById("statToday").innerText = todayDoneCount;
@@ -325,6 +346,42 @@ function getTodayStrCN(){
 function getDueWords(){
   const now=new Date();
   return wordList.filter(w=> new Date(w.nextReview) <= now);
+}
+
+/**
+ * 合并导入词条到wordList，保留本地SRS复习状态
+ * incoming：导入的单条对象
+ */
+function mergeImportItem(incoming) {
+  const w = (incoming.word || "").trim();
+  if (!w) return;
+  const localIndex = wordList.findIndex(it => it.word === w);
+  const now = new Date();
+
+  if (localIndex >= 0) {
+    const local = wordList[localIndex];
+    wordList[localIndex] = {
+      ...local,
+      pinyin: incoming.pinyin ?? local.pinyin,
+      meaning: incoming.meaning ?? local.meaning,
+      example: incoming.example ?? local.example,
+      wrongText: incoming.wrongText ?? local.wrongText,
+      errType: incoming.errType ?? local.errType
+    };
+  } else {
+    wordList.push({
+      word: w,
+      pinyin: incoming.pinyin || "",
+      meaning: incoming.meaning || "",
+      example: incoming.example || "",
+      wrongText: incoming.wrongText || "",
+      errType: incoming.errType || "其他",
+      level: 0,
+      failCount: 0,
+      createTime: now.toISOString(),
+      nextReview: now.toISOString()
+    });
+  }
 }
 
 function addSingleWord(){
@@ -408,7 +465,6 @@ function renderLibPreview(){
   pre.innerHTML = html;
 }
 
-//删除词条
 function deleteWord(index){
   const item = wordList[index];
   if(!confirm(`确定要删除词条【${item.word}】吗？删除后不可恢复！`)) return;
@@ -436,232 +492,114 @@ function saveEdit(){
   const newMean = document.getElementById("editMeaning").value.trim();
   const newEx = document.getElementById("editExample").value.trim();
   const newWrong = document.getElementById("editWrong").value.trim();
-  if(!newWord){
-    alert("词语不能为空");
-    return;
-  }
-  const dup = wordList.some((it,i)=> i!==idx && it.word === newWord);
-  if(dup){
-    alert("该词语名称已经存在");
-    return;
-  }
+  if(!newWord) return alert("词语不能为空");
   wordList[idx].word = newWord;
   wordList[idx].pinyin = newPy;
   wordList[idx].meaning = newMean;
   wordList[idx].example = newEx;
   wordList[idx].wrongText = newWrong;
-  closeEditModal();
   saveData();
+  closeEditModal();
 }
 
-function getPaperItems(){
-  const src = document.getElementById("paperSource").value;
-  let arr = [];
-  if(src==="due"){
-    arr = getDueWords();
-  }else if(src==="all"){
-    arr = [...wordList];
-  }else if(src==="level"){
-    const minLv = Number(document.getElementById("lvMin").value||0);
-    const maxLv = Number(document.getElementById("lvMax").value||7);
-    arr = wordList.filter(x=>x.level>=minLv && x.level<=maxLv);
+// JSON导入
+document.getElementById("inJson").onchange = async function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  try {
+    const arr = JSON.parse(text);
+    if (!Array.isArray(arr)) throw new Error("需要数组格式");
+    let updateCount = 0, addCount = 0;
+    arr.forEach(item => {
+      const beforeLen = wordList.length;
+      mergeImportItem(item);
+      if(wordList.length > beforeLen) addCount++;
+      else updateCount++;
+    });
+    saveData();
+    alert(`导入完成：新增${addCount}条，更新已有词条${updateCount}条`);
+  } catch (err) {
+    alert("JSON解析失败：" + err.message);
   }
-  return [...arr].sort((a,b)=>a.level - b.level);
-}
+  this.value = "";
+};
 
-function buildPaperHtml(list,withEx){
-  let html = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#fff;font-family:system-ui, sans-serif;padding:40px 30px;max-width:800px;margin:0 auto}
-h2{text-align:center;font-size:24px;margin-bottom:30px}
-.line{font-size:18px;margin:16px 0}
-.ex{font-size:15px;color:#444;margin:4px 0 10px 26px;font-style:italic}
-.blank{display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:10px;vertical-align:bottom}
-</style>
-</head>
-<body>
-<h2>看拼音写词语</h2>`;
-  list.forEach(it=>{
-    html += `<div class="line">${it.pinyin||"（无拼音）"}<span class="blank"></span></div>`;
-    if(withEx && it.example){
-      html += `<div class="ex">例句：${it.example}</div>`;
-    }
-  })
-  html += "</body></html>";
-  return html;
-}
-
-function openPaperPreview(){
-  const list = getPaperItems();
-  const withEx = document.getElementById("paperWithExample").checked;
-  if(list.length===0){
-    alert("没有符合条件的词条");
-    return;
-  }
-  document.getElementById("paperContent").innerHTML = buildPaperHtml(list,withEx);
-  document.getElementById("paperModal").style.display="block";
-}
-function closePaperModal(){
-  document.getElementById("paperModal").style.display="none";
-}
-
-function openPrintWindow(){
-  const list = getPaperItems();
-  const withEx = document.getElementById("paperWithExample").checked;
-  if(list.length===0){
-    alert("没有符合条件的词条");
-    return;
-  }
-  const paperHtml = buildPaperHtml(list,withEx);
-  if(isMobile()){
-    //手机端 iframe弹窗打印
-    const iframe = document.getElementById("printIframe");
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(paperHtml);
-    doc.close();
-    document.getElementById("printModal").style.display="block";
-    document.getElementById("triggerPrintBtn").onclick=()=>{
-      iframe.contentWindow.print();
-    }
-  }else{
-    //PC端新标签
-    const printWin = window.open("","_blank","width=900,height=1100");
-    if(!printWin){
-      alert("浏览器拦截了弹窗，请允许弹出窗口再重试");
-      return;
-    }
-    printWin.document.write(paperHtml);
-    printWin.document.close();
-    printWin.focus();
-  }
-}
-function closePrintModal(){
-  document.getElementById("printModal").style.display="none";
-}
+// Excel导入
+document.getElementById("inExcel").onchange = function (e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = evt => {
+    const data = evt.target.result;
+    const workbook = XLSX.read(data, { type: "binary" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonArr = XLSX.utils.sheet_to_json(sheet);
+    let addCount = 0, updateCount = 0;
+    jsonArr.forEach(row => {
+      const beforeLen = wordList.length;
+      mergeImportItem({
+        word: row.word || row["词语"] || "",
+        pinyin: row.pinyin || row["拼音"] || "",
+        meaning: row.meaning || row["释义"] || "",
+        example: row.example || row["例句"] || "",
+        wrongText: row.wrongText || row["易错提示"] || ""
+      });
+      if(wordList.length > beforeLen) addCount++;
+      else updateCount++;
+    });
+    saveData();
+    alert(`Excel导入完成：新增${addCount}条，更新已有词条${updateCount}条`);
+  };
+  reader.readAsBinaryString(f);
+  this.value = "";
+};
 
 function exportJson(){
   const blob = new Blob([JSON.stringify(wordList,null,2)],{type:"application/json"});
-  downloadFile(blob,"words.json");
-}
-
-document.getElementById("inJson").onchange = readJsonFile;
-function readJsonFile(e){
-  const f = e.target.files[0];
-  if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    try{
-      const arr=JSON.parse(ev.target.result);
-      arr.forEach(x=>{if(x.example===undefined)x.example="";})
-      mergeAndGoReview(arr);
-    }catch{alert("JSON解析出错")}
-  }
-  r.readAsText(f);
-  e.target.value = "";
-}
-
-function exportExcel(){
-  const data = wordList.map(x=>({
-    word:x.word,pinyin:x.pinyin,meaning:x.meaning,example:x.example,wrongText:x.wrongText,errType:x.errType,
-    level:x.level,failCount:x.failCount,createTime:x.createTime,nextReview:x.nextReview
-  }));
-  const ws = XLSX.utils.json_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,"词库");
-  const buf = XLSX.write(wb,{bookType:"xlsx",type:"array"});
-  const blob = new Blob([new Uint8Array(buf)]);
-  downloadFile(blob,"字词错题本.xlsx");
-}
-
-document.getElementById("inExcel").onchange = function(e){
-  const f = e.target.files[0];
-  if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const b = new Uint8Array(ev.target.result);
-    const wb = XLSX.read(b,{type:"array"});
-    const sheet = wb.Sheets[wb.SheetNames[0]];
-    const arr = XLSX.utils.sheet_to_json(sheet);
-    arr.forEach(x=>{if(x.example===undefined)x.example="";})
-    mergeAndGoReview(arr);
-  }
-  r.readAsArrayBuffer(f);
-  e.target.value = "";
-}
-
-function mergeAndGoReview(newArr){
-  let add=0;
-  const now=new Date();
-  newArr.forEach(item=>{
-    if(!item.word) return;
-    if(wordList.some(x=>x.word===item.word)) return;
-    if(!item.nextReview) item.nextReview = now.toISOString();
-    if(!item.level) item.level = 0;
-    if(!item.failCount) item.failCount = 0;
-    if(!item.createTime) item.createTime = now.toISOString();
-    if(!item.errType) item.errType = "其他";
-    if(!item.wrongText) item.wrongText = "";
-    if(!item.example) item.example = "";
-    wordList.push(item);
-    add++;
-  })
-  saveData();
-  alert(`导入完成，新增${add}条，重复词条已跳过`);
-  switchPage('review');
-}
-
-function downloadFile(blob,filename){
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = filename;
+  a.download = "wordlib.json";
   a.click();
   URL.revokeObjectURL(a.href);
 }
 
-function startBatchReview(){
-  batchReviewItems = JSON.parse(JSON.stringify(getDueWords()));
-  if(batchReviewItems.length===0){
-    document.getElementById("reviewBatchPanel").style.display="none";
-    document.getElementById("startReviewBtn").style.display="block";
-    document.getElementById("reviewTip").innerText="暂无待复习词条";
-    return;
-  }
-  batchReviewItems.forEach(it=>{
-    it.marked = null;
-  })
-  document.getElementById("startReviewBtn").style.display="none";
-  document.getElementById("reviewTip").innerText="";
-  document.getElementById("reviewBatchPanel").style.display="block";
-  renderBatchList();
+function exportExcel(){
+  const ws = XLSX.utils.json_to_sheet(wordList);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"词库");
+  XLSX.writeFile(wb,"wordlib.xlsx");
 }
 
-function renderBatchList(){
+// 批量复习
+function startBatchReview(){
+  batchReviewItems = getDueWords().map(it=>({...it,marked:null}));
+  const tipEl = document.getElementById("reviewTip");
+  const panel = document.getElementById("reviewBatchPanel");
+  if(batchReviewItems.length===0){
+    tipEl.innerText = "暂无待复习词条";
+    panel.style.display = "none";
+    return;
+  }
+  tipEl.innerText = `待复习共 ${batchReviewItems.length} 条，请在纸上默写，之后逐题批改`;
+  panel.style.display = "block";
+  renderBatchReview();
+}
+
+function renderBatchReview(){
   const wrap = document.getElementById("reviewListWrap");
   let html = "";
-  batchReviewItems.forEach((item,idx)=>{
-    let tagText = "";
-    if(item.marked === true) tagText = "<span class='done-tag'>✅已标记答对</span>";
-    if(item.marked === false) tagText = "<span class='done-tag'>❌已标记答错</span>";
-
-    let hintText = "";
-    if(item.meaning) hintText += "释义："+item.meaning+"\n";
-    let exHtml = item.example ? `<div class="review-example">例句：${item.example}</div>` : "";
-
+  batchReviewItems.forEach((item,bIdx)=>{
     html += `
-    <div class="review-item" data-idx="${idx}">
-      <div class="review-pinyin">${item.pinyin||"无拼音"} ${tagText}</div>
-      <div class="review-hint">${hintText}</div>
-      ${exHtml}
-      <div class="review-answer">正确词语：${item.word}</div>
+    <div class="review-item" data-bidx="${bIdx}">
+      <div class="review-pinyin">${item.pinyin}</div>
+      ${item.wrongText ? `<div class="review-hint">易错提示：${item.wrongText}</div>`:""}
+      ${item.example ? `<div class="review-example">例句：${item.example}</div>`:""}
+      <div class="review-answer" id="ans-${bIdx}">答案：${item.word}</div>
       <div class="review-buttons">
-        <button class="btn-green" onclick="setMark(${idx},true)">✅答对</button>
-        <button class="btn-red" onclick="setMark(${idx},false)">❌答错</button>
+        <button class="btn-green btn-small" onclick="markOk(${bIdx})">✅答对</button>
+        <button class="btn-red btn-small" onclick="markFail(${bIdx})">❌答错</button>
+        <span class="done-tag" id="tag-${bIdx}"></span>
       </div>
     </div>
     `
@@ -669,50 +607,125 @@ function renderBatchList(){
   wrap.innerHTML = html;
 }
 
-function setMark(idx,isRight){
-  batchReviewItems[idx].marked = isRight;
-  renderBatchList();
+function markOk(bIdx){
+  batchReviewItems[bIdx].marked = true;
+  document.getElementById(`tag-${bIdx}`).innerText = "已标记：答对";
+}
+function markFail(bIdx){
+  batchReviewItems[bIdx].marked = false;
+  document.getElementById(`tag-${bIdx}`).innerText = "已标记：答错";
 }
 
 function showAllAnswer(){
-  document.querySelectorAll(".review-answer").forEach(el=>el.style.display="block");
+  batchReviewItems.forEach((_,i)=>{
+    document.getElementById(`ans-${i}`).style.display="block";
+  })
 }
 function hideAllAnswer(){
-  document.querySelectorAll(".review-answer").forEach(el=>el.style.display="none");
+  batchReviewItems.forEach((_,i)=>{
+    document.getElementById(`ans-${i}`).style.display="none";
+  })
 }
 
 function finishAllReview(){
-  const unMarked = batchReviewItems.filter(x=>x.marked===null);
-  if(unMarked.length>0){
-    if(!confirm(`还有${unMarked.length}个词条尚未批改，确定要保存退出吗？`)){
-      return;
-    }
+  const unmarked = batchReviewItems.filter(x=>x.marked===null);
+  if(unmarked.length>0){
+    return alert(`还有 ${unmarked.length} 题没有标记答对/答错，请全部批改标记后再保存`);
   }
   const nowTs = Date.now();
   batchReviewItems.forEach(bItem=>{
-    if(bItem.marked===null) return;
-    const mainIdx = wordList.findIndex(m=>m.word === bItem.word);
+    const mainIdx = wordList.findIndex(w=>w.word === bItem.word);
     if(mainIdx === -1) return;
-
     if(bItem.marked === true){
       wordList[mainIdx].level += 1;
       const lv = Math.min(wordList[mainIdx].level, SRS_INTERVALS.length-1);
       wordList[mainIdx].nextReview = new Date(nowTs + SRS_INTERVALS[lv]).toISOString();
-      todayDoneCount += 1;
+      todayDoneCount +=1;
+      saveMeta();
     }else{
-      wordList[mainIdx].level = Math.max(0, wordList[mainIdx].level - 2);
+      wordList[mainIdx].level = 0;
+      wordList[mainIdx].failCount +=1;
       wordList[mainIdx].nextReview = new Date(nowTs).toISOString();
-      wordList[mainIdx].failCount += 1;
     }
   })
   saveData();
-  batchReviewItems = [];
-  document.getElementById("reviewBatchPanel").style.display="none";
-  document.getElementById("startReviewBtn").style.display="block";
   alert("批改结果已保存！");
+  startBatchReview();
 }
 
-loadData();
+//试卷预览与打印
+function getPaperSourceWords(){
+  const sel = document.getElementById("paperSource").value;
+  if(sel === "due") return getDueWords();
+  if(sel === "all") return [...wordList];
+  if(sel === "level"){
+    const minLv = Number(document.getElementById("lvMin").value)||0;
+    const maxLv = Number(document.getElementById("lvMax").value)||7;
+    return wordList.filter(w=>w.level >= minLv && w.level <= maxLv);
+  }
+  return [];
+}
+
+function openPaperPreview(){
+  const list = getPaperSourceWords();
+  const withEx = document.getElementById("paperWithExample").checked;
+  const cont = document.getElementById("paperContent");
+  let html = `<div class="paper-title">看拼音写词语</div>`;
+  list.forEach(it=>{
+    html += `<div class="paper-line">${it.pinyin}<span class="paper-blank"></span></div>`;
+    if(withEx && it.example){
+      html += `<div class="paper-example">${it.example}</div>`;
+    }
+  })
+  cont.innerHTML = html;
+  document.getElementById("paperModal").style.display="block";
+}
+function closePaperModal(){
+  document.getElementById("paperModal").style.display="none";
+}
+
+function openPrintWindow(){
+  const list = getPaperSourceWords();
+  const withEx = document.getElementById("paperWithExample").checked;
+  const iframe = document.getElementById("printIframe");
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  let html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf‑8">
+<style>
+body{padding:30px;font-size:18px;}
+.title{text-align:center;font-size:22px;font-weight:bold;margin-bottom:24px}
+.line{margin:14px 0}
+.ex{font-size:15px;color:#444;margin:4px 0 10px 24px;font-style:italic}
+.blank{display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:10px;vertical-align:bottom}
+</style>
+</head>
+<body>
+<div class="title">看拼音写词语</div>
+`;
+  list.forEach(it=>{
+    html += `<div class="line">${it.pinyin}<span class="blank"></span></div>`;
+    if(withEx && it.example) html += `<div class="ex">${it.example}</div>`;
+  })
+  html += "</body></html>";
+  iframeDoc.open();
+  iframeDoc.write(html);
+  iframeDoc.close();
+  document.getElementById("printModal").style.display="block";
+}
+document.getElementById("triggerPrintBtn").onclick = function(){
+  const iframe = document.getElementById("printIframe");
+  iframe.contentWindow.print();
+}
+function closePrintModal(){
+  document.getElementById("printModal").style.display="none";
+}
+
+window.onload = function(){
+  loadData();
+}
 </script>
 </body>
 </html>
