@@ -19,7 +19,6 @@ h2{font-size:22px;margin-bottom:8px}
 .page{display:none}
 .page.active{display:block}
 textarea{width:100%;min-height:110px;padding:12px;border:1px solid #ddeae3;border-radius:14px;font-size:15px;background:#fafdfb}
-/*单行文本域，用于录入页词语拼音释义*/
 .textarea-sm{min-height:64px;resize:vertical}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
 button{padding:10px 14px;border:none;border-radius:10px;font-size:15px;cursor:pointer}
@@ -35,8 +34,8 @@ input[type="file"]{display:none}
 .big-num{font-size:36px;font-weight:bold;margin:6px 0}
 .word-item{padding:12px 0;border-bottom:1px solid #edf7f2;font-size:15px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .word-info{flex:1}
+.word-btn-group{display:flex;gap:6px}
 
-/*批量复习条目样式*/
 .review-item{border:1px solid #d8e9e3;border-radius:12px;padding:14px;margin:10px 0;background:#f8fffc}
 .review-pinyin{font-size:22px;font-weight:bold;margin-bottom:6px}
 .review-hint{font-size:14px;color:#444;margin-bottom:4px;white-space:pre-line}
@@ -45,7 +44,6 @@ input[type="file"]{display:none}
 .review-buttons{display:flex;gap:8px;margin-top:10px}
 .done-tag{color:#888;font-size:13px;margin-left:8px}
 
-/*通用弹窗*/
 .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:99}
 .modal-box{background:#fff;border-radius:16px;padding:20px;width:92%;max-width:500px;max-height:85vh;overflow-y:auto}
 .modal-box h3{margin-bottom:14px}
@@ -54,7 +52,6 @@ input[type="file"]{display:none}
 .modal-row input,.modal-row select,.modal-row textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:15px}
 .modal-btn-group{display:flex;gap:10px;margin-top:16px}
 
-/*试卷预览弹窗（仅屏幕预览，打印不走这个弹窗）*/
 .paper-mask{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;z-index:100;overflow-y:auto;padding:16px}
 .paper-top-bar{max-width:800px;margin:0 auto 12px;display:flex;gap:8px;flex-wrap:wrap}
 .paper-container{background:#fff;padding:30px;max-width:800px;margin:0 auto;min-height:auto}
@@ -62,11 +59,17 @@ input[type="file"]{display:none}
 .paper-line{font-size:18px;margin:14px 0}
 .paper-example{font-size:15px;color:#444;margin:4px 0 10px 24px;font-style:italic}
 .paper-blank{display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:10px;vertical-align:bottom}
+
+.print-modal-mask{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;z-index:101;padding:16px;overflow-y:auto}
+.print-modal{background:#fff;border-radius:16px;max-width:820px;margin:0 auto;padding:16px}
+.print-iframe-wrap{width:100%;height:70vh;border:1px solid #ddd;border-radius:8px}
+@media print{
+  .print-btn-area{display:none !important;}
+}
 </style>
 </head>
 <body>
 <div class="container">
-<!-- 首页 -->
 <div id="page-home" class="page active">
   <h2>你好呀 👋</h2>
   <div class="sub-title" id="homeDate"></div>
@@ -93,7 +96,6 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 录入页：input替换为textarea-sm -->
 <div id="page-input" class="page">
   <h2>录入新词</h2>
   <div class="card">
@@ -107,7 +109,6 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 批量复习页 -->
 <div id="page-review" class="page">
   <h2>批量纸笔复习</h2>
   <div class="card">
@@ -125,7 +126,6 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 词库管理页 -->
 <div id="page-wordlib" class="page">
   <h2>词库管理</h2>
   <div class="card">
@@ -181,7 +181,7 @@ input[type="file"]{display:none}
       <button class="btn-green" onclick="openPaperPreview()">预览试卷</button>
       <button class="btn-outline" onclick="openPrintWindow()">🖨打印另存PDF</button>
     </div>
-    <div class="tip">操作：点击打印另存PDF → 打开新标签页，在新标签页点【打印试卷】按钮，选择另存为PDF。<br>⚠️浏览器拦截弹窗请允许弹出窗口；打印完成后关闭新标签页即可回到本工具。</div>
+    <div class="tip">PC：打开新标签打印；手机：页面内弹窗打印，完成直接关闭弹窗返回工具。</div>
   </div>
 
   <div class="card">
@@ -190,7 +190,6 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 统计页 -->
 <div id="page-stat" class="page">
   <h2>学习统计</h2>
   <div class="card">
@@ -200,7 +199,6 @@ input[type="file"]{display:none}
 </div>
 </div>
 
-<!-- 编辑词条弹窗 -->
 <div class="modal-mask" id="editModal">
   <div class="modal-box">
     <h3>编辑词条</h3>
@@ -232,12 +230,21 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 试卷预览弹窗 -->
 <div class="paper-mask" id="paperModal">
   <div class="paper-top-bar">
     <button class="btn-red" onclick="closePaperModal()">关闭预览</button>
   </div>
   <div class="paper-container" id="paperContent"></div>
+</div>
+
+<div class="print-modal-mask" id="printModal">
+  <div class="print-modal">
+    <div class="btn-row" style="justify-content:space-between;margin-bottom:12px">
+      <button class="btn-green" id="triggerPrintBtn">🖨点击打印/另存PDF</button>
+      <button class="btn-red" onclick="closePrintModal()">关闭</button>
+    </div>
+    <iframe id="printIframe" class="print-iframe-wrap"></iframe>
+  </div>
 </div>
 
 <div class="bottom-nav">
@@ -263,6 +270,10 @@ const SRS_INTERVALS = [
     1000 * 60 * 60 * 24 *14,
     1000 * 60 * 60 * 24 *30
 ];
+
+function isMobile(){
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
 document.getElementById("paperSource").onchange = function(){
   document.getElementById("levelRangeWrap").style.display = this.value==="level"?"flex":"none";
@@ -316,7 +327,6 @@ function getDueWords(){
   return wordList.filter(w=> new Date(w.nextReview) <= now);
 }
 
-//单条录入
 function addSingleWord(){
   const w = document.getElementById("inpWord").value.trim();
   const py = document.getElementById("inpPinyin").value.trim();
@@ -339,7 +349,6 @@ function addSingleWord(){
   alert("添加成功，该词条已进入今日复习队列");
 }
 
-//批量粘贴导入，支持 词语|拼音|释义|例句
 function batchAddWords(){
   const txt = document.getElementById("batchText").value.trim();
   if(!txt) return alert("请粘贴词语");
@@ -371,7 +380,6 @@ function batchAddWords(){
   alert(`完成，新增${add}条，重复已跳过，新词已加入今日复习`);
 }
 
-//渲染词库全部词条 level升序
 function renderLibPreview(){
   const pre = document.getElementById("libPreview");
   const sorted = [...wordList].sort((a,b)=>a.level - b.level);
@@ -390,8 +398,9 @@ function renderLibPreview(){
         <div>例句：${item.example||"—"}</div>
         <div style="font-size:13px;color:#555">易错：${item.wrongText||"—"}</div>
       </div>
-      <div>
+      <div class="word-btn-group">
         <button class="btn-small btn-outline" onclick="openEditModal(${realIdx})">编辑</button>
+        <button class="btn-small btn-red" onclick="deleteWord(${realIdx})">删除</button>
       </div>
     </div>
     `
@@ -399,7 +408,14 @@ function renderLibPreview(){
   pre.innerHTML = html;
 }
 
-//编辑弹窗
+//删除词条
+function deleteWord(index){
+  const item = wordList[index];
+  if(!confirm(`确定要删除词条【${item.word}】吗？删除后不可恢复！`)) return;
+  wordList.splice(index,1);
+  saveData();
+}
+
 function openEditModal(index){
   const item = wordList[index];
   document.getElementById("editIndex").value = index;
@@ -438,7 +454,6 @@ function saveEdit(){
   saveData();
 }
 
-//获取试卷筛选后的词条数组
 function getPaperItems(){
   const src = document.getElementById("paperSource").value;
   let arr = [];
@@ -454,21 +469,33 @@ function getPaperItems(){
   return [...arr].sort((a,b)=>a.level - b.level);
 }
 
-//生成试卷HTML字符串
 function buildPaperHtml(list,withEx){
-  let html = `<div style="max-width:800px;margin:0 auto;padding:40px 30px;font-family:system-ui">
-  <h2 style="text-align:center;font-size:24px;margin-bottom:30px">看拼音写词语</h2>`;
+  let html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;font-family:system-ui, sans-serif;padding:40px 30px;max-width:800px;margin:0 auto}
+h2{text-align:center;font-size:24px;margin-bottom:30px}
+.line{font-size:18px;margin:16px 0}
+.ex{font-size:15px;color:#444;margin:4px 0 10px 26px;font-style:italic}
+.blank{display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:10px;vertical-align:bottom}
+</style>
+</head>
+<body>
+<h2>看拼音写词语</h2>`;
   list.forEach(it=>{
-    html += `<div style="font-size:18px;margin:16px 0">${it.pinyin||"（无拼音）"}<span style="display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:10px;vertical-align:bottom"></span></div>`;
+    html += `<div class="line">${it.pinyin||"（无拼音）"}<span class="blank"></span></div>`;
     if(withEx && it.example){
-      html += `<div style="font-size:15px;color:#444;margin:4px 0 10px 26px;font-style:italic">例句：${it.example}</div>`;
+      html += `<div class="ex">例句：${it.example}</div>`;
     }
   })
-  html += "</div>";
+  html += "</body></html>";
   return html;
 }
 
-//试卷预览（主页面弹窗）
 function openPaperPreview(){
   const list = getPaperItems();
   const withEx = document.getElementById("paperWithExample").checked;
@@ -483,7 +510,6 @@ function closePaperModal(){
   document.getElementById("paperModal").style.display="none";
 }
 
-//打开打印窗口：修复浏览器拦截，新窗口放一个按钮让用户手动点打印
 function openPrintWindow(){
   const list = getPaperItems();
   const withEx = document.getElementById("paperWithExample").checked;
@@ -492,45 +518,33 @@ function openPrintWindow(){
     return;
   }
   const paperHtml = buildPaperHtml(list,withEx);
-  //同步点击事件内直接打开窗口，不做任何延迟
-  const printWin = window.open("","_blank","width=900,height=1100");
-  if(!printWin){
-    alert("浏览器拦截了弹窗，请在地址栏允许此网站弹出窗口，再重试");
-    return;
+  if(isMobile()){
+    //手机端 iframe弹窗打印
+    const iframe = document.getElementById("printIframe");
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(paperHtml);
+    doc.close();
+    document.getElementById("printModal").style.display="block";
+    document.getElementById("triggerPrintBtn").onclick=()=>{
+      iframe.contentWindow.print();
+    }
+  }else{
+    //PC端新标签
+    const printWin = window.open("","_blank","width=900,height=1100");
+    if(!printWin){
+      alert("浏览器拦截了弹窗，请允许弹出窗口再重试");
+      return;
+    }
+    printWin.document.write(paperHtml);
+    printWin.document.close();
+    printWin.focus();
   }
-  //写入页面，页面自带打印按钮，由用户手动点击触发print，增加返回提示
-  printWin.document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>看拼音写词语试卷</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#fff}
-.print-btn-area{padding:20px;text-align:center}
-button{padding:10px 20px;font-size:16px;cursor:pointer}
-.tip-back{font-size:13px;color:#666;margin-top:12px}
-@media print{
-  .print-btn-area{display:none !important;}
 }
-</style>
-</head>
-<body>
-<div class="print-btn-area">
-  <button onclick="window.print()">🖨点击此处打印/另存PDF</button>
-  <p style="margin-top:8px;font-size:13px;color:#666">打印目标选择：另存为PDF</p>
-  <p class="tip-back">✅完成后直接关闭当前标签页，即可回到字词错题本工具</p>
-</div>
-${paperHtml}
-</body>
-</html>
-  `);
-  printWin.document.close();
-  printWin.focus();
+function closePrintModal(){
+  document.getElementById("printModal").style.display="none";
 }
 
-//JSON导出
 function exportJson(){
   const blob = new Blob([JSON.stringify(wordList,null,2)],{type:"application/json"});
   downloadFile(blob,"words.json");
@@ -552,7 +566,6 @@ function readJsonFile(e){
   e.target.value = "";
 }
 
-//Excel导出
 function exportExcel(){
   const data = wordList.map(x=>({
     word:x.word,pinyin:x.pinyin,meaning:x.meaning,example:x.example,wrongText:x.wrongText,errType:x.errType,
@@ -611,7 +624,6 @@ function downloadFile(blob,filename){
   URL.revokeObjectURL(a.href);
 }
 
-//===== 批量复习逻辑 =====
 function startBatchReview(){
   batchReviewItems = JSON.parse(JSON.stringify(getDueWords()));
   if(batchReviewItems.length===0){
