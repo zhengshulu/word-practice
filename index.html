@@ -19,6 +19,8 @@ h2{font-size:22px;margin-bottom:8px}
 .page{display:none}
 .page.active{display:block}
 textarea{width:100%;min-height:110px;padding:12px;border:1px solid #ddeae3;border-radius:14px;font-size:15px;background:#fafdfb}
+/*单行文本域，用于录入页词语拼音释义*/
+.textarea-sm{min-height:64px;resize:vertical}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
 button{padding:10px 14px;border:none;border-radius:10px;font-size:15px;cursor:pointer}
 .btn-green{background:#32bc9c;color:#fff}
@@ -91,14 +93,14 @@ input[type="file"]{display:none}
   </div>
 </div>
 
-<!-- 录入页 -->
+<!-- 录入页：input替换为textarea-sm -->
 <div id="page-input" class="page">
   <h2>录入新词</h2>
   <div class="card">
     <div class="tip">手动单条添加词语，新增词条立即进入今日复习队列</div>
-    <input placeholder="词语" id="inpWord" />
-    <input placeholder="拼音" id="inpPinyin" />
-    <input placeholder="释义" id="inpMeaning" />
+    <textarea class="textarea-sm" placeholder="词语" id="inpWord"></textarea>
+    <textarea class="textarea-sm" placeholder="拼音" id="inpPinyin"></textarea>
+    <textarea class="textarea-sm" placeholder="释义" id="inpMeaning"></textarea>
     <textarea placeholder="例句（可选）" id="inpExample" rows="2"></textarea>
     <textarea placeholder="容易写错的部分（可选）" id="inpWrong" rows="2"></textarea>
     <button class="btn-green" onclick="addSingleWord()" style="width:100%;margin-top:12px">保存词条</button>
@@ -179,7 +181,7 @@ input[type="file"]{display:none}
       <button class="btn-green" onclick="openPaperPreview()">预览试卷</button>
       <button class="btn-outline" onclick="openPrintWindow()">🖨打印另存PDF</button>
     </div>
-    <div class="tip">操作：点击打印另存PDF → 打开新标签页，在新标签页点【打印试卷】按钮，选择另存为PDF。<br>⚠️浏览器拦截弹窗请允许弹出窗口。</div>
+    <div class="tip">操作：点击打印另存PDF → 打开新标签页，在新标签页点【打印试卷】按钮，选择另存为PDF。<br>⚠️浏览器拦截弹窗请允许弹出窗口；打印完成后关闭新标签页即可回到本工具。</div>
   </div>
 
   <div class="card">
@@ -496,7 +498,7 @@ function openPrintWindow(){
     alert("浏览器拦截了弹窗，请在地址栏允许此网站弹出窗口，再重试");
     return;
   }
-  //写入页面，页面自带打印按钮，由用户手动点击触发print
+  //写入页面，页面自带打印按钮，由用户手动点击触发print，增加返回提示
   printWin.document.write(`
 <!DOCTYPE html>
 <html>
@@ -508,6 +510,7 @@ function openPrintWindow(){
 body{background:#fff}
 .print-btn-area{padding:20px;text-align:center}
 button{padding:10px 20px;font-size:16px;cursor:pointer}
+.tip-back{font-size:13px;color:#666;margin-top:12px}
 @media print{
   .print-btn-area{display:none !important;}
 }
@@ -517,6 +520,7 @@ button{padding:10px 20px;font-size:16px;cursor:pointer}
 <div class="print-btn-area">
   <button onclick="window.print()">🖨点击此处打印/另存PDF</button>
   <p style="margin-top:8px;font-size:13px;color:#666">打印目标选择：另存为PDF</p>
+  <p class="tip-back">✅完成后直接关闭当前标签页，即可回到字词错题本工具</p>
 </div>
 ${paperHtml}
 </body>
