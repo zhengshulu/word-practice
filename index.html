@@ -180,10 +180,15 @@ input[type="file"]{display:none}
     </div>
     <div class="tip">PC：打开新标签打印；手机：页面内弹窗打印，完成直接关闭弹窗返回工具。</div>
   </div>
+
+  <!--=====新增搜索框=====-->
   <div class="card">
-    <h3>全部词条（按level从低到高）</h3>
-    <div id="libPreview"></div>
+    <h3>搜索词条</h3>
+    <input type="text" id="libSearchInput" placeholder="输入词语搜索，支持模糊匹配词语/拼音/释义" style="width:100%;padding:10px;border:1px solid #ddeae3;border-radius:12px;font-size:15px;">
   </div>
+
+  <h3>全部词条（按level从低到高）</h3>
+  <div id="libPreview"></div>
 </div>
 <div id="page-stat" class="page">
   <h2>学习统计</h2>
@@ -260,7 +265,6 @@ let wordList = [];
 let batchReviewItems = [];
 let todayDoneCount = 0;
 let localDict = {};
-
 const SRS_INTERVALS = [
     1000 * 60 * 10,
     1000 * 60 * 60 * 3,
@@ -270,7 +274,6 @@ const SRS_INTERVALS = [
     1000 * 60 * 60 * 24 *14,
     1000 * 60 * 60 * 24 *30
 ];
-
 async function loadDictJson(){
   try{
     const res = await fetch("./dict.json");
@@ -281,7 +284,6 @@ async function loadDictJson(){
     console.warn("未加载外部词典，本地file打开会出现此提示属正常：",err.message);
   }
 }
-
 function smartFillDict(){
   const w = document.getElementById("inpWord").value.trim();
   if(!w){
@@ -301,7 +303,6 @@ function smartFillDict(){
     document.getElementById("inpExample").value = processedExample;
   }
 }
-
 function isMobile(){
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -466,15 +467,26 @@ function batchAddWords(){
   document.getElementById("batchText").value="";
   alert(`完成：新增${add}条，更新已有词条${update}条`);
 }
+
+//====修改后的渲染列表，带搜索过滤====
 function renderLibPreview(){
   const pre = document.getElementById("libPreview");
+  const searchText = (document.getElementById("libSearchInput")?.value || "").trim().toLowerCase();
   const sorted = [...wordList].sort((a,b)=>a.level - b.level);
-  if(sorted.length===0){
-    pre.innerHTML="<div class='tip'>暂无词条</div>";
+  let filtered = sorted;
+  if(searchText){
+    filtered = sorted.filter(item=>{
+      return item.word.toLowerCase().includes(searchText)
+        || (item.pinyin||"").toLowerCase().includes(searchText)
+        || (item.meaning||"").toLowerCase().includes(searchText);
+    })
+  }
+  if(filtered.length===0){
+    pre.innerHTML="<div class='tip'>暂无匹配词条</div>";
     return;
   }
   let html = "";
-  sorted.forEach((item)=>{
+  filtered.forEach((item)=>{
     const realIdx = wordList.indexOf(item);
     html += `
     <div class="word-item">
@@ -493,6 +505,7 @@ function renderLibPreview(){
   })
   pre.innerHTML = html;
 }
+
 function deleteWord(index){
   const item = wordList[index];
   if(!confirm(`确定要删除词条【${item.word}】吗？删除后不可恢复！`)) return;
@@ -761,6 +774,10 @@ function closePrintModal(){
 window.onload = async function(){
   await loadDictJson();
   loadData();
+  //绑定搜索输入实时刷新列表
+  document.getElementById("libSearchInput")?.addEventListener("input",()=>{
+    renderLibPreview();
+  })
 }
 </script>
 </body>
