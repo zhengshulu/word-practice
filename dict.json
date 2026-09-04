@@ -363,6 +363,267 @@
     "pinyin": "jǐn xiù",
     "meaning": "精美鲜艳的丝织品；比喻美丽美好",
     "example": "祖国山河一片锦绣。"
+  },
+  "幽静": {
+    "pinyin": "yōu jìng",
+    "meaning": "十分安静，没有喧闹",
+    "example": "夜晚的山林格外幽静。"
+  },
+  "谱写": {
+    "pinyin": "pǔ xiě",
+    "meaning": "创作乐曲、诗篇等",
+    "example": "音乐家为祖国谱写动人的乐章。"
+  },
+  "琴键": {
+    "pinyin": "qín jiàn",
+    "meaning": "钢琴等乐器上用来弹奏的按键",
+    "example": "他的手指轻快地划过琴键。"
+  },
+  "纯熟": {
+    "pinyin": "chún shú",
+    "meaning": "技艺熟练，很有功底",
+    "example": "经过常年练习，他弹琴的手法十分纯熟。"
+  },
+  "清幽": {
+    "pinyin": "qīng yōu",
+    "meaning": "秀丽而安静",
+    "example": "月光洒在林间，环境一片清幽。"
+  },
+  "陶醉": {
+    "pinyin": "táo zuì",
+    "meaning": "沉浸在美好的情境之中",
+    "example": "我们陶醉在优美的琴声里。"
+  },
+  "断断续续": {
+    "pinyin": "duàn duàn xù xù",
+    "meaning": "时而中断，时而继续",
+    "example": "远处传来断断续续的琴声。"
+  },
+  "郑重": {
+    "pinyin": "zhèng zhòng",
+    "meaning": "严肃认真，态度庄重",
+    "example": "我郑重地接过这份珍贵的礼物。"
+  },
+  "厨房": {
+    "pinyin": "chú fáng",
+    "meaning": "做饭做菜的房间",
+    "example": "妈妈正在厨房里准备晚饭。"
+  },
+  "毡帽": {
+    "pinyin": "zhān mào",
+    "meaning": "毡子做成的帽子",
+    "example": "闰土头戴一顶蓝色的毡帽。"
+  },
+  "伶俐": {
+    "pinyin": "líng lì",
+    "meaning": "聪明灵活，反应快",
+    "example": "这孩子聪明伶俐，十分讨人喜欢。"
+  },
+  "刺猬": {
+    "pinyin": "cì wei",
+    "meaning": "身上长刺的小动物",
+    "example": "草丛里跑出来一只小刺猬。"
+  },
+  "畜生": {
+    "pinyin": "chù sheng",
+    "meaning": "泛指禽兽、家畜",
+    "example": "院子里饲养着几头畜生。"
+  },
+  "逃窜": {
+    "pinyin": "táo cuàn",
+    "meaning": "惊慌地逃跑",
+    "example": "小动物看见人影，慌忙四处逃窜。"
+  },
+  "萍藻": {
+    "pinyin": "píng zǎo",
+    "meaning": "浮萍与水藻，水生植物",
+    "example": "水面漂浮着绿色的萍藻。"
+  },
+  "荡漾": {
+    "pinyin": "dàng yàng",
+    "meaning": "水波一起一伏地晃动",
+    "example": "小船划过湖面，水波轻轻荡漾。"
+  },
+  "追悼": {
+    "pinyin": "zhuī dào",
+    "meaning": "怀念悼念逝去的人",
+    "example": "大家集会追悼这位伟大的先辈。"
+  },
+  "爱抚": {
+    "pinyin": "ài fǔ",
+    "meaning": "疼爱抚慰",
+    "example": "奶奶用手爱抚着我的头顶。"
+  },
+  "团聚": {
+    "pinyin": "tuán jù",
+    "meaning": "亲人分散之后重新相聚",
+    "example": "春节一家人终于团聚在一起。"
+  },
+  "逝世": {
+    "pinyin": "shì shì",
+    "meaning": "去世，离世",
+    "example": "那位老人已经逝世多年。"
+  },
+  "殡仪馆": {
+    "pinyin": "bìn yí guǎn",
+    "meaning": "办理丧葬事务的场所",
+    "example": "人们来到殡仪馆送别逝者。"
+  },
+  "咳嗽": {
+    "pinyin": "ké sou",
+    "meaning": "喉咙不适，发出阵阵咳声",
+    "example": "受凉之后，他不停地咳嗽。"
+  },
+  "挽联": {
+    "pinyin": "wǎn lián",
+    "meaning": "哀悼死者的对联",
+    "example": "厅堂挂满寄托哀思的挽联。"
+  },
+  "羞愧": {
+    "pinyin": "xiū kuì",
+    "meaning": "感到羞耻惭愧",
+    "example": "做错了事，他内心十分羞愧。"
+  },
+  "深奥": {
+    "pinyin": "shēn ào",
+    "meaning": "道理高深，不容易读懂理解",
+    "example": "这本书内容深奥，需要反复阅读。"
+  },
+  "枯瘦": {
+    "pinyin": "kū shòu",
+    "meaning": "干瘪消瘦",
+    "example": "老人伸出一双枯瘦的手。"
+  },
+  "明晃晃": {
+    "pinyin": "míng huǎng huǎng",
+    "meaning": "光亮闪烁，耀眼",
+    "example": "阳光照得刀子明晃晃的。"
+  },
+  "囫囵吞枣": {
+    "pinyin": "hú lún tūn zǎo",
+    "meaning": "读书不加思考笼统接受，不求理解",
+    "example": "读书不能囫囵吞枣，要细细体会。"
+  },
+  "张冠李戴": {
+    "pinyin": "zhāng guān lǐ dài",
+    "meaning": "弄错对象，把甲的事安到乙身上",
+    "example": "记混人物故事，就容易张冠李戴。"
+  },
+  "恍然大悟": {
+    "pinyin": "huǎng rán dà wù",
+    "meaning": "一下子完全明白过来",
+    "example": "听完讲解，我恍然大悟。"
+  },
+  "饱经风霜": {
+    "pinyin": "bǎo jīng fēng shuāng",
+    "meaning": "经历过很多艰难困苦",
+    "example": "爷爷那张饱经风霜的脸上露出笑容。"
+  },
+  "枯竭": {
+    "pinyin": "kū jié",
+    "meaning": "资源用尽，干涸",
+    "example": "过度开采会让地下水源枯竭。"
+  },
+  "滥用": {
+    "pinyin": "làn yòng",
+    "meaning": "胡乱、不加节制地使用",
+    "example": "我们不能滥用自然资源。"
+  },
+  "和蔼": {
+    "pinyin": "hé ǎi",
+    "meaning": "态度温和亲切",
+    "example": "那位老人性格和蔼可亲。"
+  },
+  "璀璨": {
+    "pinyin": "cuǐ càn",
+    "meaning": "光彩闪亮夺目",
+    "example": "夜空中繁星璀璨。"
+  },
+  "渺小": {
+    "pinyin": "miǎo xiǎo",
+    "meaning": "微小，不起眼",
+    "example": "在宏大的宇宙面前，人类十分渺小。"
+  },
+  "棚架": {
+    "pinyin": "péng jià",
+    "meaning": "供藤蔓植物攀爬的架子",
+    "example": "葡萄顺着棚架向上生长。"
+  },
+  "软绵绵": {
+    "pinyin": "ruǎn mián mián",
+    "meaning": "柔软的样子",
+    "example": "云朵看上去软绵绵的。"
+  },
+  "袖筒": {
+    "pinyin": "xiù tǒng",
+    "meaning": "衣服袖子的筒状部分",
+    "example": "他把手悄悄伸进袖筒。"
+  },
+  "瓦蓝": {
+    "pinyin": "wǎ lán",
+    "meaning": "像瓦片一样明净的蓝色",
+    "example": "雨后天空一片瓦蓝。"
+  },
+  "酱油": {
+    "pinyin": "jiàng yóu",
+    "meaning": "调味用的深色液体调料",
+    "example": "做菜的时候放一点酱油。"
+  },
+  "嘴唇": {
+    "pinyin": "zuǐ chún",
+    "meaning": "口周围的肌肉组织",
+    "example": "寒冷天气不要把嘴唇冻裂。"
+  },
+  "废话": {
+    "pinyin": "fèi huà",
+    "meaning": "没有用处多余的话语",
+    "example": "抓紧时间做事，少说废话。"
+  },
+  "搀扶": {
+    "pinyin": "chān fú",
+    "meaning": "用手扶住别人，帮助行走",
+    "example": "大家搀扶老人慢慢走过马路。"
+  },
+  "祭奠": {
+    "pinyin": "jì diàn",
+    "meaning": "举行仪式悼念死者",
+    "example": "人们来到这里祭奠逝去的英雄。"
+  },
+  "蜷缩": {
+    "pinyin": "quán suō",
+    "meaning": "身体弯曲缩成一团",
+    "example": "小猫蜷缩在墙角睡觉。"
+  },
+  "魁梧": {
+    "pinyin": "kuí wú",
+    "meaning": "身材高大健壮",
+    "example": "这位战士身材十分魁梧。"
+  },
+  "黧黑": {
+    "pinyin": "lí hēi",
+    "meaning": "皮肤黑，黝黑",
+    "example": "常年户外劳作，他的面孔黧黑。"
+  },
+  "糟糕": {
+    "pinyin": "zāo gāo",
+    "meaning": "事情变坏，情况不好",
+    "example": "糟糕，我忘记带上作业本。"
+  },
+  "湿淋淋": {
+    "pinyin": "shī lín lín",
+    "meaning": "全部湿透，往下滴水",
+    "example": "大雨把全身淋得湿淋淋。"
+  },
+  "缝缝补补": {
+    "pinyin": "féng féng bǔ bǔ",
+    "meaning": "反复缝补破损衣物",
+    "example": "旧衣服经过缝缝补补还能穿。"
+  },
+  "自言自语": {
+    "pinyin": "zì yán zì yǔ",
+    "meaning": "自己跟自己说话",
+    "example": "他一边走路一边自言自语。"
   }
+  
 
 }
