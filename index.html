@@ -4,8 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial‑scale=1.0,user-scalable=no" />
 <title>字词错题本｜批量纸笔复习</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/zh-lx/pinyin-pro@3.21.0/dist/pinyin-pro.js"></script>
+<script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{background:#edf7f2;color:#222;padding-bottom:100px}
@@ -96,11 +95,10 @@ input[type="file"]{display:none}
 <div id="page-input" class="page">
   <h2>录入新词</h2>
   <div class="card">
-    <div class="tip">手动单条添加词语；词语输入框失去焦点<strong>自动生成拼音</strong>；线上Pages可加载dict.json词典实现释义例句自动填充</div>
-    <textarea class="textarea-sm" placeholder="词语" id="inpWord" onblur="autoFillPinyin()"></textarea>
+    <div class="tip">手动单条添加词语；线上Pages加载dict.json词典，点击智能填充自动填入拼音、释义、例句（例句中原词语会替换为拼音）</div>
+    <textarea class="textarea-sm" placeholder="词语" id="inpWord"></textarea>
     <div class="btn-row">
-      <button class="btn-outline btn-small" onclick="autoFillPinyin()">🔤自动生成拼音</button>
-      <button class="btn-warning btn-small" onclick="smartFillDict()">🔍智能填充(释义/例句)</button>
+      <button class="btn-warning btn-small" onclick="smartFillDict()">🔍智能填充(拼音/释义/例句)</button>
     </div>
     <textarea class="textarea-sm" placeholder="拼音" id="inpPinyin"></textarea>
     <textarea class="textarea-sm" placeholder="释义" id="inpMeaning"></textarea>
@@ -284,13 +282,6 @@ async function loadDictJson(){
   }
 }
 
-function autoFillPinyin(){
-  const w = document.getElementById("inpWord").value.trim();
-  if(!w) return;
-  const py = pinyinPro.pinyin(w,{tone:true,separator:" "});
-  document.getElementById("inpPinyin").value = py;
-}
-
 function smartFillDict(){
   const w = document.getElementById("inpWord").value.trim();
   if(!w){
@@ -302,8 +293,13 @@ function smartFillDict(){
     return;
   }
   const item = localDict[w];
+  if(item.pinyin) document.getElementById("inpPinyin").value = item.pinyin;
   if(item.meaning) document.getElementById("inpMeaning").value = item.meaning;
-  if(item.example) document.getElementById("inpExample").value = item.example;
+  if(item.example){
+    // 把例句中原汉字词语替换为拼音
+    let processedExample = item.example.replaceAll(w, item.pinyin);
+    document.getElementById("inpExample").value = processedExample;
+  }
 }
 
 function isMobile(){
@@ -621,7 +617,7 @@ function renderBatchReview(){
     <div class="review-item" data-bidx="${bIdx}">
       <div class="review-title-line">${bIdx+1}. ${item.pinyin}</div>
       ${item.wrongText ? `<div class="review-hint">易错提示：${item.wrongText}</div>`:""}
-      ${item.example ? `<div class="review-example">例句：${item.example}</div>`:""}
+      ${item.example ? `<div class="review-example">${item.example}</div>`:""}
       <div class="review-answer" id="ans-${bIdx}">答案：${item.word}</div>
       <div class="review-buttons">
         <button class="btn-green btn-small" onclick="markOk(${bIdx})">✅答对</button>
