@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial‑scale=1.0,user-scalable=no" />
 <title>字词错题本｜批量纸笔复习</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zh-lx/pinyin-pro@3.21.0/dist/pinyin-pro.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{background:#edf7f2;color:#222;padding-bottom:100px}
@@ -25,6 +26,7 @@ button{padding:10px 14px;border:none;border-radius:10px;font-size:15px;cursor:po
 .btn-green{background:#32bc9c;color:#fff}
 .btn-red{background:#e53e3e;color:#fff}
 .btn-outline{border:1px solid #32bc9c;color:#32bc9c;background:#fff}
+.btn-warning{background:#f59e0b;color:#fff}
 .btn-small{padding:4px 8px;font-size:13px}
 input[type="file"]{display:none}
 .file-label{padding:10px 14px;border:1px solid #32bc9c;color:#32bc9c;background:#fff;border-radius:10px;cursor:pointer;font-size:15px;display:inline-block}
@@ -48,7 +50,7 @@ input[type="file"]{display:none}
 .modal-row{margin-bottom:12px}
 .modal-row label{display:block;font-size:14px;margin-bottom:4px;color:#444}
 .modal-row input,.modal-row select,.modal-row textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:15px}
-.modal-btn-group{display:flex;gap:10px;margin-top:16px}
+.modal-btn-group{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .paper-mask{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;z-index:100;overflow-y:auto;padding:16px}
 .paper-top-bar{max-width:800px;margin:0 auto 12px;display:flex;gap:8px;flex-wrap:wrap}
 .paper-container{background:#fff;padding:30px;max-width:800px;margin:0 auto;min-height:auto}
@@ -94,8 +96,12 @@ input[type="file"]{display:none}
 <div id="page-input" class="page">
   <h2>录入新词</h2>
   <div class="card">
-    <div class="tip">手动单条添加词语，新增词条立即进入今日复习队列</div>
-    <textarea class="textarea-sm" placeholder="词语" id="inpWord"></textarea>
+    <div class="tip">手动单条添加词语；词语输入框失去焦点<strong>自动生成拼音</strong>；线上Pages可加载dict.json词典实现释义例句自动填充</div>
+    <textarea class="textarea-sm" placeholder="词语" id="inpWord" onblur="autoFillPinyin()"></textarea>
+    <div class="btn-row">
+      <button class="btn-outline btn-small" onclick="autoFillPinyin()">🔤自动生成拼音</button>
+      <button class="btn-warning btn-small" onclick="smartFillDict()">🔍智能填充(释义/例句)</button>
+    </div>
     <textarea class="textarea-sm" placeholder="拼音" id="inpPinyin"></textarea>
     <textarea class="textarea-sm" placeholder="释义" id="inpMeaning"></textarea>
     <textarea placeholder="例句（可选）" id="inpExample" rows="2"></textarea>
@@ -255,6 +261,8 @@ const META_KEY = "wordReviewMeta";
 let wordList = [];
 let batchReviewItems = [];
 let todayDoneCount = 0;
+let localDict = {};
+
 const SRS_INTERVALS = [
     1000 * 60 * 10,
     1000 * 60 * 60 * 3,
@@ -264,6 +272,40 @@ const SRS_INTERVALS = [
     1000 * 60 * 60 * 24 *14,
     1000 * 60 * 60 * 24 *30
 ];
+
+async function loadDictJson(){
+  try{
+    const res = await fetch("./dict.json");
+    if(!res.ok) throw new Error("词典文件读取失败");
+    localDict = await res.json();
+    console.log("✅外部词典dict.json加载成功，条目数：",Object.keys(localDict).length);
+  }catch(err){
+    console.warn("未加载外部词典，本地file打开会出现此提示属正常：",err.message);
+  }
+}
+
+function autoFillPinyin(){
+  const w = document.getElementById("inpWord").value.trim();
+  if(!w) return;
+  const py = pinyinPro.pinyin(w,{tone:true,separator:" "});
+  document.getElementById("inpPinyin").value = py;
+}
+
+function smartFillDict(){
+  const w = document.getElementById("inpWord").value.trim();
+  if(!w){
+    alert("请先输入词语");
+    return;
+  }
+  if(!localDict[w]){
+    alert("⚠️词典中未找到该词语。\n确认dict.json已部署在仓库根目录，并且已经添加 .nojekyll 文件。");
+    return;
+  }
+  const item = localDict[w];
+  if(item.meaning) document.getElementById("inpMeaning").value = item.meaning;
+  if(item.example) document.getElementById("inpExample").value = item.example;
+}
+
 function isMobile(){
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -720,7 +762,8 @@ document.getElementById("triggerPrintBtn").onclick = function(){
 function closePrintModal(){
   document.getElementById("printModal").style.display="none";
 }
-window.onload = function(){
+window.onload = async function(){
+  await loadDictJson();
   loadData();
 }
 </script>
