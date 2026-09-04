@@ -1,17 +1,368 @@
 {
-  "眺望": {
-    "pinyin": "tiào wàng",
-    "meaning": "从高处往远处看",
-    "example": "登上山顶，我们眺望连绵的群山。"
+  "绿毯": {
+    "pinyin": "lǜ tǎn",
+    "meaning": "绿色的毯子，课文指碧绿的草原",
+    "example": "一望无际的草原就像一张巨大的绿毯。"
   },
-  "慷慨": {
-    "pinyin": "kāng kǎi",
-    "meaning": "大方，不吝啬财物；也指意气激昂",
-    "example": "他为人慷慨，常常帮助有困难的同学。"
+  "勾勒": {
+    "pinyin": "gōu lè",
+    "meaning": "用线条画出轮廓",
+    "example": "那些小丘的线条是那么柔美，就像只用绿色渲染，不用墨线勾勒的中国画。"
   },
-  "拘束": {
+  "柔美": {
+    "pinyin": "róu měi",
+    "meaning": "柔和美好",
+    "example": "江南的风光景色十分柔美。"
+  },
+  "惊叹": {
+    "pinyin": "jīng tàn",
+    "meaning": "惊奇赞叹",
+    "example": "看到壮丽的景色，大家不由得发出惊叹。"
+  },
+  "回味": {
+    "pinyin": "huí wèi",
+    "meaning": "细细地回忆、品味",
+    "example": "我一直在回味刚才那一段动人的对话。"
+  },
+  "洒脱": {
+    "pinyin": "sǎ tuō",
+    "meaning": "言谈举止自然大方，不受拘束",
+    "example": "他性格洒脱，从不计较小事。"
+  },
+  "衣裳": {
+    "pinyin": "yī shang",
+    "meaning": "衣服",
+    "example": "草原上的男女老少都穿着漂亮的衣裳。"
+  },
+  "彩虹": {
+    "pinyin": "cǎi hóng",
+    "meaning": "雨后天空出现的彩色光带",
+    "example": "雨停之后，天边挂起一道美丽的彩虹。"
+  },
+ "马蹄": {
+    "pinyin": "mǎ tí",
+    "meaning": "马的脚掌",
+    "example": "远处传来哒哒的马蹄声。"
+  },
+ "拘束": {
     "pinyin": "jū shù",
     "meaning": "过分约束自己，显得不自然",
-    "example": "第一次上台，他显得有些拘束。"
+    "example": "来到陌生人家，孩子显得有些拘束。"
+  },
+ "羞涩": {
+    "pinyin": "xiū sè",
+    "meaning": "难为情，态度不自然",
+    "example": "小姑娘羞涩地低下了头。"
+  },
+ "幽雅": {
+    "pinyin": "yōu yǎ",
+    "meaning": "幽静而雅致",
+    "example": "小院环境十分幽雅，种满丁香花。"
+  },
+ "伏案": {
+    "pinyin": "fú àn",
+    "meaning": "趴在桌子上（读书、写字）",
+    "example": "爸爸经常伏案工作到深夜。"
+  },
+ "浑浊": {
+    "pinyin": "hún zhuó",
+    "meaning": "水、空气等含有杂质，不清澈",
+    "example": "大雨过后小河的水变得浑浊。"
+  },
+ "笨拙": {
+    "pinyin": "bèn zhuō",
+    "meaning": "反应迟钝，不灵巧",
+    "example": "小熊的动作看起来有些笨拙。"
+  },
+ "参差": {
+    "pinyin": "cēn cī",
+    "meaning": "长短、高低、大小不齐",
+    "example": "院中的树木长得高低参差。"
+  },
+ "单薄": {
+    "pinyin": "dān bó",
+    "meaning": "身体瘦弱；衣服薄而少",
+    "example": "天气变冷，不要穿得太单薄。"
+  },
+ "照耀": {
+    "pinyin": "zhào yào",
+    "meaning": "光线照射",
+    "example": "温暖的阳光照耀着大地。"
+  },
+ "迷蒙": {
+    "pinyin": "mí méng",
+    "meaning": "模糊，看不清楚",
+    "example": "清晨的山间烟雨迷蒙。"
+  },
+ "花蕾": {
+    "pinyin": "huā lěi",
+    "meaning": "还没有开放的花骨朵",
+    "example": "枝头上挂满了含苞待放的花蕾。"
+  },
+ "衣襟": {
+    "pinyin": "yī jīn",
+    "meaning": "上衣的前襟",
+    "example": "风吹起了他的衣襟。"
+  },
+ "恍然": {
+    "pinyin": "huǎng rán",
+    "meaning": "忽然醒悟",
+    "example": "听了老师的讲解，我恍然明白了道理。"
+  },
+ "愁怨": {
+    "pinyin": "chóu yuàn",
+    "meaning": "忧愁怨恨",
+    "example": "丁香结象征生活中解不开的愁怨。"
+  },
+ "悬崖": {
+    "pinyin": "xuán yá",
+    "meaning": "高而陡的山崖",
+    "example": "战士们站在高高的悬崖边上。"
+  },
+ "日寇": {
+    "pinyin": "rì kòu",
+    "meaning": "旧时指日本侵略者",
+    "example": "英勇的战士奋力抗击日寇。"
+  },
+ "手榴弹": {
+    "pinyin": "shǒu liú dàn",
+    "meaning": "用手投掷的小型炸弹",
+    "example": "战士扔出手中的手榴弹。"
+  },
+ "全神贯注": {
+    "pinyin": "quán shén guàn zhù",
+    "meaning": "全部精神集中在一起，注意力高度集中",
+    "example": "同学们全神贯注地听老师讲课。"
+  },
+ "斩钉截铁": {
+    "pinyin": "zhǎn dīng jié tiě",
+    "meaning": "说话做事坚决果断，毫不犹豫",
+    "example": "班长斩钉截铁地说出自己的决定。"
+  },
+ "热血沸腾": {
+    "pinyin": "rè xuè fèi téng",
+    "meaning": "情绪高涨，激动不已",
+    "example": "听了英雄故事，大家个个热血沸腾。"
+  },
+ "居高临下": {
+    "pinyin": "jū gāo lín xià",
+    "meaning": "站在高处，俯视下方",
+    "example": "我站在楼顶居高临下眺望整条街道。"
+  },
+ "山涧": {
+    "pinyin": "shān jiàn",
+    "meaning": "山间的水沟",
+    "example": "山涧流淌着清澈的泉水。"
+  },
+ "粉身碎骨": {
+    "pinyin": "fěn shēn suì gǔ",
+    "meaning": "身体粉碎，多指牺牲生命",
+    "example": "为了理想，哪怕粉身碎骨也不怕。"
+  },
+ "屹立": {
+    "pinyin": "yì lì",
+    "meaning": "像山峰一样高耸而稳固地立着",
+    "example": "英雄纪念碑屹立在广场中央。"
+  },
+ "眺望": {
+    "pinyin": "tiào wàng",
+    "meaning": "站在高处向远处看",
+    "example": "战士眺望远方的群山。"
+  },
+ "喜悦": {
+    "pinyin": "xǐ yuè",
+    "meaning": "愉快高兴",
+    "example": "成功之后，大家心中充满喜悦。"
+  },
+ "豪迈": {
+    "pinyin": "háo mài",
+    "meaning": "气魄大，豪放",
+    "example": "他发出一段豪迈的宣言。"
+  },
+ "汇集": {
+    "pinyin": "huì jí",
+    "meaning": "聚集到一起",
+    "example": "四面八方的人群汇集到广场。"
+  },
+ "爆发": {
+    "pinyin": "bào fā",
+    "meaning": "力量、情绪突然猛烈发作",
+    "example": "广场上爆发出雷鸣般的掌声。"
+  },
+ "宣布": {
+    "pinyin": "xuān bù",
+    "meaning": "正式公开告诉大家",
+    "example": "主持人宣布活动正式开始。"
+  },
+ "旗帜": {
+    "pinyin": "qí zhì",
+    "meaning": "各种旗子的统称",
+    "example": "广场上飘扬着鲜艳的旗帜。"
+  },
+ "检阅": {
+    "pinyin": "jiǎn yuè",
+    "meaning": "高级首长视察军队或者群众队伍",
+    "example": "首长站在车上检阅队伍。"
+  },
+ "疙瘩": {
+    "pinyin": "gē da",
+    "meaning": "皮肤上突起的硬块；结成的小团",
+    "example": "衣服上面起了很多小疙瘩。"
+  },
+ "疲倦": {
+    "pinyin": "pí juàn",
+    "meaning": "劳累困倦",
+    "example": "忙碌一天，我感到十分疲倦。"
+  },
+ "别出心裁": {
+    "pinyin": "bié chū xīn cái",
+    "meaning": "想出的办法与众不同",
+    "example": "小明别出心裁做了一个手工玩具。"
+  },
+ "技高一筹": {
+    "pinyin": "jì gāo yī chóu",
+    "meaning": "技术比别人高出一等",
+    "example": "在这场比赛中，对方技高一筹。"
+  },
+ "颓然": {
+    "pinyin": "tuí rán",
+    "meaning": "败兴、垂头丧气的样子",
+    "example": "比赛失败，他颓然坐回椅子。"
+  },
+ "沮丧": {
+    "pinyin": "jǔ sàng",
+    "meaning": "灰心失望",
+    "example": "遇到挫折，不要过分沮丧。"
+  },
+ "念念有词": {
+    "pinyin": "niàn niàn yǒu cí",
+    "meaning": "嘴里不停地念叨某些话语",
+    "example": "他嘴里念念有词，正在背诵课文。"
+  },
+ "忘乎所以": {
+    "pinyin": "wàng hū suǒ yǐ",
+    "meaning": "因过度兴奋而忘记一切",
+    "example": "取得一点成绩不要忘乎所以。"
+  },
+ "心满意足": {
+    "pinyin": "xīn mǎn yì zú",
+    "meaning": "心里非常满足",
+    "example": "吃到爱吃的饭菜，我心满意足。"
+  },
+ "揭开": {
+    "pinyin": "jiē kāi",
+    "meaning": "把覆盖的东西掀开，使显露出来",
+    "example": "科学家努力揭开宇宙的秘密。"
+  },
+ "干燥": {
+    "pinyin": "gān zào",
+    "meaning": "缺少水分",
+    "example": "沙漠地区气候十分干燥。"
+  },
+ "沙漠": {
+    "pinyin": "shā mò",
+    "meaning": "地面完全被沙覆盖，缺水少植物的地区",
+    "example": "骆驼可以在沙漠中长途行走。"
+  },
+ "磁场": {
+    "pinyin": "cí chǎng",
+    "meaning": "传递磁力的空间",
+    "example": "地球拥有强大的磁场。"
+  },
+ "抵御": {
+    "pinyin": "dǐ yù",
+    "meaning": "抵挡，抵抗",
+    "example": "大气层可以抵御部分宇宙射线。"
+  },
+ "咆哮": {
+    "pinyin": "páo xiào",
+    "meaning": "水流、猛兽大声吼叫",
+    "example": "洪水在山谷之中咆哮而过。"
+  },
+ "拥戴": {
+    "pinyin": "yōng dài",
+    "meaning": "拥护爱戴",
+    "example": "老百姓十分拥戴这位好干部。"
+  },
+ "沙哑": {
+    "pinyin": "shā yǎ",
+    "meaning": "嗓子发音干涩不响亮",
+    "example": "喊了很久，他的声音变得沙哑。"
+  },
+ "呻吟": {
+    "pinyin": "shēn yín",
+    "meaning": "痛苦时发出低低的声音",
+    "example": "受伤的伤员不住地呻吟。"
+  },
+ "汹涌澎湃": {
+    "pinyin": "xiōng yǒng péng pài",
+    "meaning": "水势浩大，波浪互相撞击",
+    "example": "大海的海面汹涌澎湃。"
+  },
+ "心惊肉跳": {
+    "pinyin": "xīn jīng ròu tiào",
+    "meaning": "内心十分恐惧不安",
+    "example": "走在漆黑的小路上，令人心惊肉跳。"
+  },
+ "自作自受": {
+    "pinyin": "zì zuò zì shòu",
+    "meaning": "自己做的坏事，自己承受后果",
+    "example": "不听劝告闯下祸，只能自作自受。"
+  },
+ "忧虑": {
+    "pinyin": "yōu lǜ",
+    "meaning": "忧愁担心",
+    "example": "妈妈为孩子的成长感到忧虑。"
+  },
+ "苔藓": {
+    "pinyin": "tái xiǎn",
+    "meaning": "生长在潮湿地方的低等植物",
+    "example": "老墙根处长满了绿色的苔藓。"
+  },
+ "甘蔗": {
+    "pinyin": "gān zhe",
+    "meaning": "茎可以吃，含糖量高的农作物",
+    "example": "南方田里种了大片甘蔗。"
+  },
+ "瀑布": {
+    "pinyin": "pù bù",
+    "meaning": "从高山陡壁流下来的水",
+    "example": "远远就听见瀑布哗哗的水声。"
+  },
+ "谚语": {
+    "pinyin": "yàn yǔ",
+    "meaning": "民间流传，总结生活经验的短句",
+    "example": "这条谚语告诉我们天气变化的规律。"
+  },
+ "斗篷": {
+    "pinyin": "dǒu peng",
+    "meaning": "没有袖子的外衣",
+    "example": "下雨的时候披上一件斗篷。"
+  },
+ "喧闹": {
+    "pinyin": "xuān nào",
+    "meaning": "喧哗热闹",
+    "example": "下课之后校园变得十分喧闹。"
+  },
+ "逗引": {
+    "pinyin": "dòu yǐn",
+    "meaning": "用言语、动作招惹、吸引",
+    "example": "我拿零食逗引小猫过来。"
+  },
+ "巍峨": {
+    "pinyin": "wēi é",
+    "meaning": "山或者建筑物高大雄伟",
+    "example": "巍峨的高山直插云天。"
+  },
+ "琴弦": {
+    "pinyin": "qín xián",
+    "meaning": "琴上面用来发声的丝线",
+    "example": "轻轻拨动琴弦，优美的乐曲响起。"
+  },
+ "锦绣": {
+    "pinyin": "jǐn xiù",
+    "meaning": "精美鲜艳的丝织品；比喻美丽美好",
+    "example": "祖国山河一片锦绣。"
   }
+
 }
