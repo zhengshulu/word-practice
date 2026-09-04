@@ -1,4 +1,747 @@
 {
+  "昼夜": {
+    "pinyin": "zhòu yè",
+    "meaning": "白天和黑夜",
+    "example": "战士们昼夜坚守在自己的岗位上。"
+  },
+  "耕耘": {
+    "pinyin": "gēng yún",
+    "meaning": "耕地除草，泛指田间劳作",
+    "example": "农民伯伯在田野里辛勤耕耘。"
+  },
+  "桑树": {
+    "pinyin": "sāng shù",
+    "meaning": "叶子可以喂蚕的树木",
+    "example": "院子外面种着几棵高大的桑树。"
+  },
+  "破晓": {
+    "pinyin": "pò xiǎo",
+    "meaning": "天刚刚亮的时候",
+    "example": "破晓时分，公鸡开始高声啼叫。"
+  },
+  "蝴蝶": {
+    "pinyin": "hú dié",
+    "meaning": "翅膀色彩艳丽的昆虫",
+    "example": "五颜六色的蝴蝶在花丛飞舞。"
+  },
+  "蚂蚱": {
+    "pinyin": "mà zha",
+    "meaning": "蝗虫一类的昆虫",
+    "example": "草丛里蹦出来一只绿色的蚂蚱。"
+  },
+  "樱桃": {
+    "pinyin": "yīng táo",
+    "meaning": "果实鲜红的小水果",
+    "example": "树上结满一颗颗鲜红的樱桃。"
+  },
+  "瞎闹": {
+    "pinyin": "xiā nào",
+    "meaning": "没有来由、没有分寸地胡闹",
+    "example": "做作业的时候不要瞎闹。"
+  },
+  "铲地": {
+    "pinyin": "chǎn dì",
+    "meaning": "用铲子松土除草",
+    "example": "爷爷拿着锄头在田里铲地。"
+  },
+  "割草": {
+    "pinyin": "gē cǎo",
+    "meaning": "用工具把草割下来",
+    "example": "我帮奶奶到后院割草喂兔子。"
+  },
+  "拴住": {
+    "pinyin": "shuān zhù",
+    "meaning": "用绳子系牢固定",
+    "example": "把小牛拴住，防止它到处乱跑。"
+  },
+  "水瓢": {
+    "pinyin": "shuǐ piáo",
+    "meaning": "用来舀水的瓢",
+    "example": "拿起水瓢，舀起一瓢清凉的井水。"
+  },
+  "闲逛": {
+    "pinyin": "xián guàng",
+    "meaning": "空闲时随意到处游玩",
+    "example": "周末，我和小伙伴在街上闲逛。"
+  },
+  "妒忌": {
+    "pinyin": "dù jì",
+    "meaning": "因为别人比自己好而心怀怨恨",
+    "example": "我们不能妒忌别人取得的成绩。"
+  },
+  "曹操": {
+    "pinyin": "cáo cāo",
+    "meaning": "三国时期著名历史人物",
+    "example": "曹操是《三国演义》中的重要人物。"
+  },
+  "都督": {
+    "pinyin": "dū du",
+    "meaning": "古代的军事长官",
+    "example": "周瑜担任东吴的大都督。"
+  },
+  "委托": {
+    "pinyin": "wěi tuō",
+    "meaning": "把事情交给别人办理",
+    "example": "老师委托我保管班级的图书。"
+  },
+  "惩罚": {
+    "pinyin": "chéng fá",
+    "meaning": "处罚犯错的人",
+    "example": "做错事情就要接受相应的惩罚。"
+  },
+  "鲁肃": {
+    "pinyin": "lǔ sù",
+    "meaning": "三国东吴历史人物",
+    "example": "鲁肃为人忠厚，待人十分诚恳。"
+  },
+  "遮掩": {
+    "pinyin": "zhē yǎn",
+    "meaning": "遮蔽、掩盖住",
+    "example": "乌云遮掩住天上的月亮。"
+  },
+  "私自": {
+    "pinyin": "sī zì",
+    "meaning": "背着别人，自己私下行动",
+    "example": "不能私自拿别人的东西。"
+  },
+  "水寨": {
+    "pinyin": "shuǐ zhài",
+    "meaning": "水边修建的军营营寨",
+    "example": "江边建起一座庞大的水寨。"
+  },
+  "擂鼓": {
+    "pinyin": "léi gǔ",
+    "meaning": "敲打战鼓",
+    "example": "战场上士兵擂鼓助威。"
+  },
+  "呐喊": {
+    "pinyin": "nà hǎn",
+    "meaning": "大声呼喊助威",
+    "example": "同学们为场上运动员呐喊助威。"
+  },
+  "插满": {
+    "pinyin": "chā mǎn",
+    "meaning": "插得满满的",
+    "example": "树枝上插满五颜六色的小旗子。"
+  },
+  "冈峦": {
+    "pinyin": "gāng luán",
+    "meaning": "连绵的山冈",
+    "example": "远处冈峦起伏，景色十分秀丽。"
+  },
+  "饥饿": {
+    "pinyin": "jī è",
+    "meaning": "肚子空，想吃东西",
+    "example": "忙碌一上午，我感到十分饥饿。"
+  },
+  "恰好": {
+    "pinyin": "qià hǎo",
+    "meaning": "正好、刚好",
+    "example": "我出门的时候，恰好遇见老同学。"
+  },
+  "官府": {
+    "pinyin": "guān fǔ",
+    "meaning": "古代官方办事机构",
+    "example": "古时候百姓有事就到官府告状。"
+  },
+  "榜文": {
+    "pinyin": "bǎng wén",
+    "meaning": "古代官府张贴的公告",
+    "example": "城门口贴着一张官府发布的榜文。"
+  },
+  "谋财": {
+    "pinyin": "móu cái",
+    "meaning": "谋划获取钱财",
+    "example": "坏人想要谋财害命，最终被抓住。"
+  },
+  "诡计": {
+    "pinyin": "guǐ jì",
+    "meaning": "狡诈害人的计谋",
+    "example": "敌人的诡计被我们一眼识破。"
+  },
+  "拖拉": {
+    "pinyin": "tuō lā",
+    "meaning": "做事迟缓，不干脆",
+    "example": "写作业不要拖拉，要及时完成。"
+  },
+  "下坠": {
+    "pinyin": "xià zhuì",
+    "meaning": "向下坠落",
+    "example": "熟透的果子从树上下坠落到地面。"
+  },
+  "胸膛": {
+    "pinyin": "xiōng táng",
+    "meaning": "胸部",
+    "example": "战士挺起胸膛勇敢向前。"
+  },
+  "泄气": {
+    "pinyin": "xiè qì",
+    "meaning": "失去信心，没有劲头",
+    "example": "遇到挫折，千万不要泄气。"
+  },
+  "截断": {
+    "pinyin": "jié duàn",
+    "meaning": "切断、隔断",
+    "example": "洪水截断了山间的小路。"
+  },
+  "拳头": {
+    "pinyin": "quán tóu",
+    "meaning": "手指握紧的手",
+    "example": "他握紧拳头，给自己加油打气。"
+  },
+  "喘气": {
+    "pinyin": "chuǎn qì",
+    "meaning": "急促呼吸",
+    "example": "跑完步，大家站在原地大口喘气。"
+  },
+  "酥软": {
+    "pinyin": "sū ruǎn",
+    "meaning": "身体软弱无力",
+    "example": "跑完长跑，双腿变得酥软。"
+  },
+  "万仞": {
+    "pinyin": "wàn rèn",
+    "meaning": "形容山极高",
+    "example": "万仞高山直插云霄。"
+  },
+  "五岳": {
+    "pinyin": "wǔ yuè",
+    "meaning": "我国五座著名大山",
+    "example": "五岳是祖国壮丽山河的代表。"
+  },
+  "摩擦": {
+    "pinyin": "mó cā",
+    "meaning": "物体互相接触来回移动",
+    "example": "双手互相摩擦，手心就会发热。"
+  },
+  "遗忘": {
+    "pinyin": "yí wàng",
+    "meaning": "忘记",
+    "example": "我遗忘了把作业本带到学校。"
+  },
+  "庆功": {
+    "pinyin": "qìng gōng",
+    "meaning": "庆祝取得功绩",
+    "example": "大家举办宴会为英雄庆功。"
+  },
+  "诊所": {
+    "pinyin": "zhěn suǒ",
+    "meaning": "小型看病就医的地方",
+    "example": "身体不舒服可以去附近诊所检查。"
+  },
+  "肥沃": {
+    "pinyin": "féi wò",
+    "meaning": "土地养分充足，利于作物生长",
+    "example": "这片土地十分肥沃，庄稼长得很好。"
+  },
+  "年龄": {
+    "pinyin": "nián líng",
+    "meaning": "人或者动植物生存的岁数",
+    "example": "爷爷的年龄已经七十多岁。"
+  },
+  "匪徒": {
+    "pinyin": "fěi tú",
+    "meaning": "强盗、坏人",
+    "example": "警察迅速把匪徒全部抓获。"
+  },
+  "绷带": {
+    "pinyin": "bēng dài",
+    "meaning": "包扎伤口的纱布带子",
+    "example": "医生用绷带包扎好受伤的手臂。"
+  },
+  "审视": {
+    "pinyin": "shěn shì",
+    "meaning": "仔细认真地看",
+    "example": "老师审视着我写的每一个字。"
+  },
+  "药剂": {
+    "pinyin": "yào jì",
+    "meaning": "药的制剂",
+    "example": "医生调配好治病的药剂。"
+  },
+  "施行": {
+    "pinyin": "shī xíng",
+    "meaning": "实施、执行",
+    "example": "医院为病人施行手术。"
+  },
+  "吭声": {
+    "pinyin": "kēng shēng",
+    "meaning": "出声、说话",
+    "example": "他受了委屈，也不肯吭声。"
+  },
+  "崭新": {
+    "pinyin": "zhǎn xīn",
+    "meaning": "全新的",
+    "example": "开学我领到崭新的课本。"
+  },
+  "由衷": {
+    "pinyin": "yóu zhōng",
+    "meaning": "发自内心",
+    "example": "我由衷地敬佩勤劳的劳动者。"
+  },
+  "慈祥": {
+    "pinyin": "cí xiáng",
+    "meaning": "神态和蔼，和善",
+    "example": "奶奶脸上露出慈祥的笑容。"
+  },
+  "荣幸": {
+    "pinyin": "róng xìng",
+    "meaning": "光荣而幸运",
+    "example": "能够上台领奖，我感到十分荣幸。"
+  },
+  "拟定": {
+    "pinyin": "nǐ dìng",
+    "meaning": "起草制定计划方案",
+    "example": "我们拟定一份周末出游计划。"
+  },
+  "参谋": {
+    "pinyin": "cān móu",
+    "meaning": "出主意，提建议的人",
+    "example": "爸爸愿意当我的参谋，帮我想办法。"
+  },
+  "瑞雪": {
+    "pinyin": "ruì xuě",
+    "meaning": "预示丰收的吉祥大雪",
+    "example": "一场瑞雪覆盖了整片大地。"
+  },
+  "损失": {
+    "pinyin": "sǔn shī",
+    "meaning": "财物等受到损耗亏损",
+    "example": "大火给仓库造成不小的损失。"
+  },
+  "锻炼": {
+    "pinyin": "duàn liàn",
+    "meaning": "通过运动增强体魄；磨炼意志",
+    "example": "每天坚持跑步，可以锻炼身体。"
+  },
+  "眷恋": {
+    "pinyin": "juàn liàn",
+    "meaning": "深切留恋、舍不得离开",
+    "example": "游子深深眷恋自己的故乡。"
+  },
+  "奔赴": {
+    "pinyin": "bēn fù",
+    "meaning": "快速奔向某地",
+    "example": "战士连夜奔赴前线。"
+  },
+  "特殊": {
+    "pinyin": "tè shū",
+    "meaning": "不同于普通的，特别的",
+    "example": "今天有一项特殊的任务交给我。"
+  },
+  "签字": {
+    "pinyin": "qiān zì",
+    "meaning": "写下自己的名字",
+    "example": "请家长在试卷上面签字。"
+  },
+  "摔跤": {
+    "pinyin": "shuāi jiāo",
+    "meaning": "摔倒；一种体育运动",
+    "example": "弟弟在草地上玩耍不小心摔跤。"
+  },
+  "搂住": {
+    "pinyin": "lǒu zhù",
+    "meaning": "双臂抱住",
+    "example": "妈妈紧紧搂住受惊吓的孩子。"
+  },
+  "依仗": {
+    "pinyin": "yī zhàng",
+    "meaning": "依靠凭借",
+    "example": "不能依仗力气大欺负同学。"
+  },
+  "鞭炮": {
+    "pinyin": "biān pào",
+    "meaning": "节日燃放的爆炸爆竹",
+    "example": "过年的时候家家户户燃放鞭炮。"
+  },
+  "欺侮": {
+    "pinyin": "qī wǔ",
+    "meaning": "欺负、侮辱",
+    "example": "我们不能欺侮弱小的同学。"
+  },
+  "挠痒": {
+    "pinyin": "náo yǎng",
+    "meaning": "抓挠发痒的地方",
+    "example": "小猫喜欢主人给它挠痒。"
+  },
+  "扳手": {
+    "pinyin": "bān shǒu",
+    "meaning": "拧螺丝的工具；扳动手掌",
+    "example": "修理师傅拿出扳手修理机器。"
+  },
+  "手腕": {
+    "pinyin": "shǒu wàn",
+    "meaning": "手掌和手臂连接的部位",
+    "example": "跳绳的时候，手腕要灵活转动。"
+  },
+  "剃头": {
+    "pinyin": "tì tóu",
+    "meaning": "剪头发",
+    "example": "每个月我都会去理发店剃头。"
+  },
+  "腮帮": {
+    "pinyin": "sāi bāng",
+    "meaning": "脸两侧的部位",
+    "example": "吃东西的时候，他的腮帮鼓鼓的。"
+  },
+  "伤疤": {
+    "pinyin": "shāng bā",
+    "meaning": "伤口愈合后留下的痕迹",
+    "example": "膝盖上留下一块浅浅的伤疤。"
+  },
+  "监视": {
+    "pinyin": "jiān shì",
+    "meaning": "严密留意观察",
+    "example": "保安监视着出入口的动静。"
+  },
+  "侄子": {
+    "pinyin": "zhí zi",
+    "meaning": "兄弟的儿子",
+    "example": "我的小侄子十分活泼可爱。"
+  },
+  "喉咙": {
+    "pinyin": "hóu lóng",
+    "meaning": "咽喉部位",
+    "example": "感冒之后我的喉咙有些疼。"
+  },
+  "矛盾": {
+    "pinyin": "máo dùn",
+    "meaning": "互相抵触；古代两种兵器",
+    "example": "我们要学会化解同学之间的矛盾。"
+  },
+  "荣誉": {
+    "pinyin": "róng yù",
+    "meaning": "光荣的名誉",
+    "example": "这份荣誉属于我们整个班级。"
+  },
+  "吾辈": {
+    "pinyin": "wú bèi",
+    "meaning": "我们这些人",
+    "example": "吾辈应当努力学习，报效祖国。"
+  },
+  "输赢": {
+    "pinyin": "shū yíng",
+    "meaning": "胜利或者失败",
+    "example": "比赛不要太看重输赢。"
+  },
+  "摩拳擦掌": {
+    "pinyin": "mó quán cā zhǎng",
+    "meaning": "形容战斗比赛前跃跃欲试",
+    "example": "运动员们摩拳擦掌，准备上场比拼。"
+  },
+  "出谋划策": {
+    "pinyin": "chū móu huà cè",
+    "meaning": "想出计谋，提供主意",
+    "example": "大家一起为班级活动出谋划策。"
+  },
+  "引荐": {
+    "pinyin": "yǐn jiàn",
+    "meaning": "推荐介绍",
+    "example": "老师把他引荐给比赛评委。"
+  },
+  "赏识": {
+    "pinyin": "shǎng shí",
+    "meaning": "认识到才能而重视欣赏",
+    "example": "老师十分赏识勤奋好学的学生。"
+  },
+  "胸有成竹": {
+    "pinyin": "xiōng yǒu chéng zhú",
+    "meaning": "做事之前心里已经有完整打算",
+    "example": "面对考试，他胸有成竹，毫不慌张。"
+  },
+  "跃跃欲试": {
+    "pinyin": "yuè yuè yù shì",
+    "meaning": "心里急切想要试一试",
+    "example": "看到别人打球，我也跃跃欲试。"
+  },
+  "兴致勃勃": {
+    "pinyin": "xìng zhì bó bó",
+    "meaning": "兴趣浓厚，情绪高涨",
+    "example": "同学们兴致勃勃参观博物馆。"
+  },
+  "帆船": {
+    "pinyin": "fān chuán",
+    "meaning": "依靠帆借助风力航行的船",
+    "example": "海面上漂着一艘白色的帆船。"
+  },
+  "航行": {
+    "pinyin": "háng xíng",
+    "meaning": "船只在水上行驶",
+    "example": "轮船在大海上平稳航行。"
+  },
+  "放肆": {
+    "pinyin": "fàng sì",
+    "meaning": "言行轻率，毫无顾忌",
+    "example": "公共场所不能行为放肆。"
+  },
+  "帽檐": {
+    "pinyin": "mào yán",
+    "meaning": "帽子向前伸出的部分",
+    "example": "拉下帽檐遮挡刺眼的阳光。"
+  },
+  "桅杆": {
+    "pinyin": "wéi gān",
+    "meaning": "船上挂帆的长杆子",
+    "example": "高高的桅杆立在船头。"
+  },
+  "撕坏": {
+    "pinyin": "sī huài",
+    "meaning": "撕扯使之破损",
+    "example": "小心不要把书本撕坏。"
+  },
+  "逗弄": {
+    "pinyin": "dòu nòng",
+    "meaning": "逗引玩耍",
+    "example": "我拿小零食逗弄家里小猫。"
+  },
+  "吓唬": {
+    "pinyin": "xià hu",
+    "meaning": "恐吓，使人害怕",
+    "example": "不要用鬼怪故事吓唬小朋友。"
+  },
+  "钩住": {
+    "pinyin": "gōu zhù",
+    "meaning": "钩子勾住物体",
+    "example": "绳子被树枝钩住了。"
+  },
+  "扭动": {
+    "pinyin": "niǔ dòng",
+    "meaning": "身体转动摆动",
+    "example": "小鱼扭动身体，快速游向远处。"
+  },
+  "咧嘴": {
+    "pinyin": "liě zuǐ",
+    "meaning": "嘴巴向两边张开",
+    "example": "小男孩咧嘴开心地大笑。"
+  },
+  "船舱": {
+    "pinyin": "chuán cāng",
+    "meaning": "船内部载人装货的空间",
+    "example": "游客们坐在船舱里面休息。"
+  },
+  "海鸥": {
+    "pinyin": "hǎi ōu",
+    "meaning": "常在海边飞翔的海鸟",
+    "example": "一群海鸥追随着轮船飞翔。"
+  },
+  "瞄准": {
+    "pinyin": "miáo zhǔn",
+    "meaning": "对准目标",
+    "example": "射击之前，要仔细瞄准靶子。"
+  },
+  "小艇": {
+    "pinyin": "xiǎo tǐng",
+    "meaning": "轻便的小船",
+    "example": "威尼斯的小艇穿梭在河道之间。"
+  },
+  "纵横": {
+    "pinyin": "zòng héng",
+    "meaning": "竖和横交错",
+    "example": "城市道路纵横交错四通八达。"
+  },
+  "船艄": {
+    "pinyin": "chuán shāo",
+    "meaning": "船的尾部",
+    "example": "船夫站在船艄稳稳地撑船。"
+  },
+  "翘起": {
+    "pinyin": "qiào qǐ",
+    "meaning": "一端向上抬起来",
+    "example": "小猫开心地翘起尾巴。"
+  },
+  "垫子": {
+    "pinyin": "diàn zi",
+    "meaning": "铺在身下的软垫",
+    "example": "椅子上铺上柔软的垫子。"
+  },
+  "窗帘": {
+    "pinyin": "chuāng lián",
+    "meaning": "窗户上遮挡光线的帘子",
+    "example": "傍晚，我把窗帘轻轻拉上。"
+  },
+  "保姆": {
+    "pinyin": "bǎo mǔ",
+    "meaning": "负责照料家务、照顾人的佣人",
+    "example": "保姆细心照顾家里的老人。"
+  },
+  "祷告": {
+    "pinyin": "dǎo gào",
+    "meaning": "向神灵诉说心愿",
+    "example": "人们在教堂里面默默祷告。"
+  },
+  "雇佣": {
+    "pinyin": "gù yōng",
+    "meaning": "出钱请人干活",
+    "example": "农场雇佣工人收割庄稼。"
+  },
+  "簇拥": {
+    "pinyin": "cù yōng",
+    "meaning": "许多人紧紧围在一起",
+    "example": "同学们簇拥着老师走进教室。"
+  },
+  "喧哗": {
+    "pinyin": "xuān huá",
+    "meaning": "声音大而嘈杂",
+    "example": "图书馆内禁止大声喧哗。"
+  },
+  "码头": {
+    "pinyin": "mǎ tou",
+    "meaning": "水边停靠船只的地方",
+    "example": "轮船停靠在码头边装卸货物。"
+  },
+  "仪式": {
+    "pinyin": "yí shì",
+    "meaning": "举行典礼的程序形式",
+    "example": "学校举行庄严的升旗仪式。"
+  },
+  "尊贵": {
+    "pinyin": "zūn guì",
+    "meaning": "高贵庄重",
+    "example": "大家对待远道而来的客人十分尊贵有礼。"
+  },
+  "远眺": {
+    "pinyin": "yuǎn tiào",
+    "meaning": "向远处眺望",
+    "example": "站在山顶远眺一望无际的原野。"
+  },
+  "骏马": {
+    "pinyin": "jùn mǎ",
+    "meaning": "健壮跑得快的马",
+    "example": "草原上一群骏马自由奔跑。"
+  },
+  "驰骋": {
+    "pinyin": "chí chěng",
+    "meaning": "骑马快速奔跑",
+    "example": "骏马在辽阔草原上驰骋。"
+  },
+  "辽阔": {
+    "pinyin": "liáo kuò",
+    "meaning": "广阔宽广",
+    "example": "辽阔的大草原一眼望不到边。"
+  },
+  "连绵": {
+    "pinyin": "lián mián",
+    "meaning": "接连不断",
+    "example": "连绵的群山一座接着一座。"
+  },
+  "凳子": {
+    "pinyin": "dèng zi",
+    "meaning": "没有靠背的坐具",
+    "example": "我搬来一张凳子坐下看书。"
+  },
+  "吆喝": {
+    "pinyin": "yāo he",
+    "meaning": "大声喊叫、叫卖",
+    "example": "街边小贩大声吆喝招揽顾客。"
+  },
+  "铃铛": {
+    "pinyin": "líng dang",
+    "meaning": "摇动可以发出响声的器物",
+    "example": "小狗脖子上挂着一串铃铛。"
+  },
+  "陶罐": {
+    "pinyin": "táo guàn",
+    "meaning": "泥土烧制的罐子",
+    "example": "古老的陶罐陈列在博物馆。"
+  },
+  "恢复": {
+    "pinyin": "huī fù",
+    "meaning": "变回原来的样子",
+    "example": "休息几天，身体慢慢恢复过来。"
+  },
+  "牲畜": {
+    "pinyin": "shēng chù",
+    "meaning": "家养的动物，家畜",
+    "example": "草原上放养着许多牲畜。"
+  },
+  "拇指": {
+    "pinyin": "mǔ zhǐ",
+    "meaning": "手的第一个手指头，大拇指",
+    "example": "我竖起大拇指夸奖同学。"
+  },
+  "搔痒": {
+    "pinyin": "sāo yǎng",
+    "meaning": "用手抓挠发痒的地方",
+    "example": "小猫给自己搔痒。"
+  },
+  "污秽": {
+    "pinyin": "wū huì",
+    "meaning": "肮脏不干净",
+    "example": "及时洗手，洗去手上的污秽。"
+  },
+  "拧开": {
+    "pinyin": "nǐng kāi",
+    "meaning": "旋转打开盖子",
+    "example": "我用力拧开矿泉水瓶的瓶盖。"
+  },
+  "螺丝": {
+    "pinyin": "luó sī",
+    "meaning": "起固定作用的金属零件",
+    "example": "螺丝刀可以拧紧螺丝。"
+  },
+  "纽扣": {
+    "pinyin": "niǔ kòu",
+    "meaning": "衣服用来扣合的扣子",
+    "example": "我把衣服上的纽扣扣好。"
+  },
+  "相貌": {
+    "pinyin": "xiàng mào",
+    "meaning": "人的长相面貌",
+    "example": "他相貌堂堂，待人十分和善。"
+  },
+  "仓库": {
+    "pinyin": "cāng kù",
+    "meaning": "存放货物的库房",
+    "example": "粮食全部存放在仓库里面。"
+  },
+  "渺小": {
+    "pinyin": "miǎo xiǎo",
+    "meaning": "微小，不起眼",
+    "example": "相比浩瀚宇宙，人类十分渺小。"
+  },
+  "鼻涕": {
+    "pinyin": "bí tì",
+    "meaning": "鼻腔分泌的液体",
+    "example": "感冒的时候，要及时擦掉鼻涕。"
+  },
+  "享受": {
+    "pinyin": "xiǎng shòu",
+    "meaning": "体会美好事物，得到满足",
+    "example": "我们享受温暖的春日阳光。"
+  },
+  "附庸": {
+    "pinyin": "fù yōng",
+    "meaning": "依附别的事物而存在",
+    "example": "次要的部分只是主体的附庸。"
+  },
+  "憎恨": {
+    "pinyin": "zēng hèn",
+    "meaning": "厌恶痛恨",
+    "example": "大家都憎恨欺骗别人的行为。"
+  },
+  "情不自禁": {
+    "pinyin": "qíng bù zì jīn",
+    "meaning": "控制不住自己的感情",
+    "example": "看到感人画面，我情不自禁流下眼泪。"
+  },
+  "神机妙算": {
+    "pinyin": "shén jī miào suàn",
+    "meaning": "善于估计局势，计谋高明",
+    "example": "诸葛亮神机妙算，顺利完成任务。"
+  },
+  "半信半疑": {
+    "pinyin": "bàn xìn bàn yí",
+    "meaning": "一半相信，一半怀疑",
+    "example": "听了他的说法，我半信半疑。"
+  },
+  "胸有成竹": {
+    "pinyin": "xiōng yǒu chéng zhú",
+    "meaning": "心中已经有完整打算",
+    "example": "面对难题，他胸有成竹从容作答。"
+  },
+
+
+
   "绿毯": {
     "pinyin": "lǜ tǎn",
     "meaning": "绿色的毯子，课文指碧绿的草原",
