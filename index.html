@@ -27,8 +27,9 @@ h2{font-size:22px;margin-bottom:8px}
 .page.active{display:block}
 textarea{width:100%;min-height:110px;padding:12px;border:1px solid #ddeae3;border-radius:14px;font-size:15px;background:#fafdfb}
 .textarea-sm{min-height:64px;resize:vertical}
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
-button{padding:10px 14px;border:none;border-radius:10px;font-size:15px;cursor:pointer}
+/*复习面板按钮行：强制不换行，缩小间隙 */
+.btn-row-review{display:flex;gap:6px;flex-wrap:nowrap;margin:12px 0}
+button{padding:8px 6px;border:none;border-radius:10px;font-size:13px;cursor:pointer;flex:1}
 .btn-green{background:#32bc9c;color:#fff}
 .btn-red{background:#e53e3e;color:#fff}
 .btn-outline{border:1px solid #32bc9c;color:#32bc9c;background:#fff}
@@ -113,7 +114,7 @@ input[type="file"]{display:none}
   <div class="card">
     <div class="tip">手动单条添加词语；线上Pages加载dict.json词典，点击智能填充自动填入拼音、释义、例句（例句中原词语会替换为拼音）</div>
     <textarea class="textarea-sm" placeholder="词语" id="inpWord"></textarea>
-    <div class="btn-row">
+    <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn-warning btn-small" onclick="smartFillDict()">🔍智能填充(拼音/释义/例句)</button>
     </div>
     <textarea class="textarea-sm" placeholder="拼音" id="inpPinyin"></textarea>
@@ -133,11 +134,11 @@ input[type="file"]{display:none}
     <div id="reviewTip">暂无待复习词条</div>
     <button class="btn-green" id="startReviewBtn" onclick="startBatchReview()" style="width:100%;margin-top:12px">刷新待复习列表</button>
     <div id="reviewBatchPanel" style="display:none;">
-      <!--三个按钮放在同一行-->
-      <div class="btn-row">
+      <!-- 复习操作按钮：强制同一行，不换行 -->
+      <div class="btn-row-review">
         <button class="btn-outline" onclick="showAllAnswer()">显示全部答案</button>
         <button class="btn-outline" onclick="hideAllAnswer()">隐藏全部答案</button>
-        <button class="btn-red" onclick="finishMarkedReview()">✅保存批改结果</button>
+        <button class="btn-red" onclick="finishMarkedReview()">✅保存批改</button>
       </div>
       <div class="tip">打开全部答案后，顶部会出现答案列表；默认全部答对，<b>点击词条切换答错(变红)/答对(黑色)</b>；必须显示全部答案才可保存批改结果</div>
 
@@ -158,18 +159,20 @@ input[type="file"]{display:none}
     <div class="tip">格式一（完整词条）：词语|拼音|释义|例句<br>格式二（仅词语）：一行只写词语<br><strong>批量粘贴/文件导入：词语相同时更新拼音/释义/例句/易错提示，保留本地复习等级、下次复习时间</strong><br>示例：<br>衣裳|yī shang|衣服|春天换上漂亮的yī shang。<br>拘束</div>
     <textarea id="batchText" placeholder="衣裳|yī shang|衣服|春天换上漂亮的yī shang。
 拘束"></textarea>
-    <button class="btn-green" onclick="batchAddWords()" style="margin-top:10px">批量添加</button>
+    <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-green" onclick="batchAddWords()" style="margin-top:10px">批量添加</button>
+    </div>
   </div>
   <div class="card">
     <h3>备份导入导出</h3>
     <div class="tip">JSON导入：词语重复<strong>完全覆盖本地词条，包括level、nextReview复习时间全部使用导入文件</strong>；粘贴文本批量导入保留本地SRS状态</div>
-    <div class="btn-row">
+    <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn-outline" onclick="exportJson()">⬇️导出 JSON</button>
       <label class="file-label">⬆️导入 JSON
         <input type="file" accept=".json" id="inJson" />
       </label>
     </div>
-    <div class="btn-row" style="margin-top:10px">
+    <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
       <button class="btn-outline" onclick="exportExcel()">⬇️导出 Excel(.xlsx)</button>
       <label class="file-label">⬆️导入 Excel(.xlsx)
         <input type="file" accept=".xlsx,.xls" id="inExcel" />
@@ -202,7 +205,7 @@ input[type="file"]{display:none}
     <div class="modal-row">
       <label><input type="checkbox" id="paperWithAnswer"> 附带参考答案页</label>
     </div>
-    <div class="btn-row">
+    <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn-green" onclick="openPaperPreview()">预览试卷</button>
       <button class="btn-outline" onclick="openPrintWindow()">🖨打印另存PDF</button>
     </div>
@@ -279,7 +282,7 @@ input[type="file"]{display:none}
 </div>
 <div class="print-modal-mask" id="printModal">
   <div class="print-modal">
-    <div class="btn-row" style="justify-content:space-between;margin-bottom:12px">
+    <div class="btn-row" style="justify-content:space-between;margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn-green" id="triggerPrintBtn">🖨点击打印/另存PDF</button>
       <button class="btn-red" onclick="closePrintModal()">关闭</button>
     </div>
@@ -503,7 +506,7 @@ function batchAddWords(){
   alert(`完成：新增${add}条，更新已有词条${update}条`);
 }
 
-//修复删除：通过词语精确匹配获取真实下标，搜索过滤列表也可以正常删除
+//修复删除：通过词语精确匹配获取真实下标
 function renderLibPreview(){
   const pre = document.getElementById("libPreview");
   const searchText = (document.getElementById("libSearchInput")?.value || "").trim().toLowerCase();
@@ -519,7 +522,6 @@ function renderLibPreview(){
   if(filtered.length===0){ pre.innerHTML="<div class='tip'>暂无匹配词条</div>"; return; }
   let html = "";
   filtered.forEach((item)=>{
-    //按词语查找真实下标，不再依赖对象引用
     const realIdx = wordList.findIndex(originItem=> originItem.word === item.word);
     html += `
     <div class="word-item">
@@ -635,8 +637,8 @@ function exportExcel(){
 function startBatchReview(){
   const maxCnt = Number(document.getElementById("maxReviewCnt").value)||20;
   const allDue = getDueWords();
-  batchReviewItems = allDue.slice(0, maxCnt).map(it=>({...it,marked:true})); // 默认全部标记为答对 true
-  isAnswerShown = false; //重置答案显示状态
+  batchReviewItems = allDue.slice(0, maxCnt).map(it=>({...it,marked:true}));
+  isAnswerShown = false;
   const tipEl = document.getElementById("reviewTip");
   const panel = document.getElementById("reviewBatchPanel");
   document.getElementById("topAnswerWrap").style.display="none";
