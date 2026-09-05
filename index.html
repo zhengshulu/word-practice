@@ -4,14 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial‑scale=1.0,user-scalable=no" />
 <title>字词错题本｜批量纸笔复习</title>
-<!-- 主屏幕图标 PWA -->
+<link rel="apple-touch-icon" href="./bird.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./bird.png">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#32bc9c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black‑translucent">
 <meta name="apple-mobile-web-app-title" content="字词错题本">
-
 <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
@@ -48,9 +47,16 @@ input[type="file"]{display:none}
 .review-title-line{font-size:22px;font-weight:bold;margin-bottom:6px}
 .review-hint{font-size:14px;color:#444;margin-bottom:4px;white-space:pre-line}
 .review-example{font-size:14px;color:#555;margin-bottom:8px;font-style:italic}
-.review-answer{font-size:20px;font-weight:bold;color:#209479;margin:8px 0;display:none}
-.review-buttons{display:flex;gap:8px;margin-top:10px}
-.done-tag{color:#888;font-size:13px;margin-left:8px}
+.review-answer{font-size:30px;font-weight:bold;color:#209479;margin:8px 0;display:none}
+.review-buttons{display:none;gap:8px;margin-top:10px;align-items:center}
+.done-tag{font-size:22px;font-weight:bold;margin-left:8px;line-height:1;}
+
+/*顶部汇总答案区域 */
+.top-answer-wrap{background:#eef8f4;border-radius:12px;padding:14px;margin-bottom:14px;display:none;}
+.top-answer-title{font-weight:bold;font-size:17px;margin-bottom:10px;}
+.top-answer-item{display:inline-block;padding:6px 10px;margin:4px;border:1px solid #b8ddd0;border-radius:6px;cursor:pointer;font-size:20px;}
+.top-answer-item.wrong{background:#fedede;color:#c82828;border-color:#f7baba;}
+
 .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:99}
 .modal-box{background:#fff;border-radius:16px;padding:20px;width:92%;max-width:500px;max-height:85vh;overflow-y:auto}
 .modal-box h3{margin-bottom:14px}
@@ -58,6 +64,8 @@ input[type="file"]{display:none}
 .modal-row label{display:block;font-size:14px;margin-bottom:4px;color:#444}
 .modal-row input,.modal-row select,.modal-row textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:15px}
 .modal-btn-group{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+#levelRangeWrap{display:none;gap:8px;}
+#levelRangeWrap.show{display:flex;}
 .paper-mask{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;z-index:100;overflow-y:auto;padding:16px}
 .paper-top-bar{max-width:800px;margin:0 auto 12px;display:flex;gap:8px;flex-wrap:wrap}
 .paper-container{background:#fff;padding:30px;max-width:800px;margin:0 auto;min-height:auto}
@@ -96,7 +104,7 @@ input[type="file"]{display:none}
   </div>
   <div class="card">
     <h3>批量纸笔复习说明</h3>
-    <div class="tip">全部待复习词语一次性列出；只批改你默写过的词条（点答对/答错），未标记词条保持待复习状态，下次继续复习。<br></div>
+    <div class="tip">全部待复习词语一次性列出；显示全部答案后，<strong>默认全部答对，只点击顶部汇总答案标记答错</strong>，未标记的视为答对。<br></div>
     <button class="btn-green" onclick="switchPage('review')" style="width:100%;margin-top:8px">开始批量复习</button>
   </div>
 </div>
@@ -118,15 +126,27 @@ input[type="file"]{display:none}
 <div id="page-review" class="page">
   <h2>批量纸笔复习</h2>
   <div class="card">
+    <div class="modal-row">
+      <label>单次最大复习数量（默认20）</label>
+      <input type="number" id="maxReviewCnt" value="20" min="1">
+    </div>
     <div id="reviewTip">暂无待复习词条</div>
     <button class="btn-green" id="startReviewBtn" onclick="startBatchReview()" style="width:100%;margin-top:12px">刷新待复习列表</button>
     <div id="reviewBatchPanel" style="display:none;">
+      <!--三个按钮放在同一行-->
       <div class="btn-row">
         <button class="btn-outline" onclick="showAllAnswer()">显示全部答案</button>
         <button class="btn-outline" onclick="hideAllAnswer()">隐藏全部答案</button>
-        <button class="btn-red" onclick="finishMarkedReview()">✅保存已标记批改结果</button>
+        <button class="btn-red" onclick="finishMarkedReview()">✅保存批改结果</button>
       </div>
-      <div class="tip">只保存已经点【答对/答错】的词条；未标记词条继续留在待复习列表，下次再做。</div>
+      <div class="tip">打开全部答案后，顶部会出现答案列表；默认全部答对，<b>点击词条切换答错(变红)/答对(黑色)</b>；必须显示全部答案才可保存批改结果</div>
+
+      <!-- 顶部汇总答案区 -->
+      <div class="top-answer-wrap" id="topAnswerWrap">
+        <div class="top-answer-title">全部答案（点击切换对错，红色=答错）</div>
+        <div id="topAnswerList"></div>
+      </div>
+
       <div id="reviewListWrap"></div>
     </div>
   </div>
@@ -142,7 +162,7 @@ input[type="file"]{display:none}
   </div>
   <div class="card">
     <h3>备份导入导出</h3>
-    <div class="tip">JSON字段：word,pinyin,meaning,example,wrongText…导入更新已有词条时<strong>保留复习时间、level等SRS状态；仅覆盖导入文件存在的字段</strong></div>
+    <div class="tip">JSON导入：词语重复<strong>完全覆盖本地词条，包括level、nextReview复习时间全部使用导入文件</strong>；粘贴文本批量导入保留本地SRS状态</div>
     <div class="btn-row">
       <button class="btn-outline" onclick="exportJson()">⬇️导出 JSON</button>
       <label class="file-label">⬆️导入 JSON
@@ -166,7 +186,7 @@ input[type="file"]{display:none}
         <option value="level">指定Level范围</option>
       </select>
     </div>
-    <div class="modal-row" id="levelRangeWrap" style="display:none;gap:8px;display:flex">
+    <div id="levelRangeWrap">
       <div style="flex:1">
         <label>最小Level</label>
         <input type="number" id="lvMin" value="0" min="0" />
@@ -188,13 +208,10 @@ input[type="file"]{display:none}
     </div>
     <div class="tip">PC：打开新标签打印；手机：页面内弹窗打印，完成直接关闭弹窗返回工具。</div>
   </div>
-
-  <!--=====新增搜索框=====-->
   <div class="card">
     <h3>搜索词条</h3>
     <input type="text" id="libSearchInput" placeholder="输入词语搜索，支持模糊匹配词语/拼音/释义" style="width:100%;padding:10px;border:1px solid #ddeae3;border-radius:12px;font-size:15px;">
   </div>
-
   <h3>全部词条（按level从低到高）</h3>
   <div id="libPreview"></div>
 </div>
@@ -203,6 +220,16 @@ input[type="file"]{display:none}
   <div class="card">
     <div>总词条：<span id="statTotal">0</span></div>
     <div>今日复习完成：<span id="statToday">0</span></div>
+  </div>
+  <div class="card">
+    <h3>选择日期，模拟查看该日期待复习词条</h3>
+    <div class="modal-row">
+      <label>选择日期</label>
+      <input type="date" id="statSelectDate">
+    </div>
+    <button class="btn-green" onclick="renderSimDueList()">模拟查询该日待复习</button>
+    <div class="tip">说明：仅模拟，不会修改任何数据；筛选nextReview小于等于所选日期的词条</div>
+    <div id="simDueWrap" style="margin-top:12px;"></div>
   </div>
   <div class="card">
     <h3>答错最多 Top10 错题</h3>
@@ -273,15 +300,10 @@ let wordList = [];
 let batchReviewItems = [];
 let todayDoneCount = 0;
 let localDict = {};
-const SRS_INTERVALS = [
-    1000 * 60 * 10,
-    1000 * 60 * 60 * 3,
-    1000 * 60 * 60 * 24,
-    1000 * 60 * 60 * 24 *3,
-    1000 * 60 * 60 * 24 *7,
-    1000 * 60 * 60 * 24 *14,
-    1000 * 60 * 60 * 24 *30
-];
+let isAnswerShown = false; //标记是否显示全部答案
+const SRS_INTERVAL_DAYS = [0,2,4,7,14,30,60,100];
+const SRS_INTERVALS = SRS_INTERVAL_DAYS.map(d => 1000 * 60 * 60 * 24 * d);
+
 async function loadDictJson(){
   try{
     const res = await fetch("./dict.json");
@@ -294,10 +316,7 @@ async function loadDictJson(){
 }
 function smartFillDict(){
   const w = document.getElementById("inpWord").value.trim();
-  if(!w){
-    alert("请先输入词语");
-    return;
-  }
+  if(!w){ alert("请先输入词语"); return; }
   if(!localDict[w]){
     alert("⚠️词典中未找到该词语。\n确认dict.json已部署在仓库根目录，并且已经添加 .nojekyll 文件。");
     return;
@@ -306,16 +325,17 @@ function smartFillDict(){
   if(item.pinyin) document.getElementById("inpPinyin").value = item.pinyin;
   if(item.meaning) document.getElementById("inpMeaning").value = item.meaning;
   if(item.example){
-    // 把例句中原汉字词语替换为拼音
     let processedExample = item.example.replaceAll(w, item.pinyin);
     document.getElementById("inpExample").value = processedExample;
   }
 }
-function isMobile(){
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
 document.getElementById("paperSource").onchange = function(){
-  document.getElementById("levelRangeWrap").style.display = this.value==="level"?"flex":"none";
+  const wrap = document.getElementById("levelRangeWrap");
+  if(this.value==="level"){
+    wrap.classList.add("show");
+  }else{
+    wrap.classList.remove("show");
+  }
 }
 function switchPage(name){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
@@ -323,16 +343,18 @@ function switchPage(name){
   document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
   document.querySelector(`.nav-item[data-page="${name}"]`).classList.add("active");
   refreshUI();
-  if(name === "review"){
-    startBatchReview();
-  }
-  if(name === "stat"){
-    renderStatPage();
-  }
+  if(name === "review") startBatchReview();
+  if(name === "stat") renderStatPage();
 }
 document.querySelectorAll(".nav-item").forEach(item=>{
   item.onclick = ()=>switchPage(item.dataset.page);
 })
+function getYmd(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
 function renderStatPage(){
   const sortErr = [...wordList].sort((a,b)=>b.failCount - a.failCount).slice(0,10);
   let html = "";
@@ -344,12 +366,28 @@ function renderStatPage(){
     })
   }
   document.getElementById("topErrorList").innerHTML = html;
+  document.getElementById("statSelectDate").value = getYmd(new Date());
+  document.getElementById("simDueWrap").innerHTML = "";
+}
+function getSimDueWords(ymdStr){
+  const endOfDay = new Date(ymdStr + " 23:59:59");
+  return wordList.filter(w=> new Date(w.nextReview) <= endOfDay);
+}
+function renderSimDueList(){
+  const sel = document.getElementById("statSelectDate").value;
+  const list = getSimDueWords(sel);
+  let html = `<div class="tip">${sel} 模拟待复习：共${list.length}条</div>`;
+  if(list.length===0){
+    html += `<div class="tip">该日期没有到期词条</div>`;
+  }else{
+    list.forEach((it,i)=>{
+      html += `<div class="word-item"><div>${i+1}. <strong>${it.word}</strong>【${it.pinyin||""}】 level:${it.level}</div></div>`;
+    })
+  }
+  document.getElementById("simDueWrap").innerHTML = html;
 }
 function saveMeta(){
-  const meta = {
-    date:getTodayStrCN(),
-    todayDoneCount:todayDoneCount
-  }
+  const meta = { date:getTodayStrCN(), todayDoneCount:todayDoneCount }
   localStorage.setItem(META_KEY, JSON.stringify(meta));
 }
 function loadData(){
@@ -365,8 +403,7 @@ function loadData(){
   if(metaRaw){
     const meta = JSON.parse(metaRaw);
     if(meta.date !== getTodayStrCN()){
-      todayDoneCount = 0;
-      saveMeta();
+      todayDoneCount = 0; saveMeta();
     }else{
       todayDoneCount = meta.todayDoneCount || 0;
     }
@@ -398,19 +435,23 @@ function getDueWords(){
   const now=new Date();
   return wordList.filter(w=> new Date(w.nextReview) <= now);
 }
-function mergeImportItem(incoming) {
+function mergeImportItem(incoming, fullOverride=false) {
   const w = (incoming.word || "").trim();
   if (!w) return {isNew:false,skip:true};
   const localIndex = wordList.findIndex(it => it.word === w);
   const now = new Date();
   if (localIndex >= 0) {
-    const local = wordList[localIndex];
-    const updated = {...local};
-    if(Object.prototype.hasOwnProperty.call(incoming,"pinyin")) updated.pinyin = incoming.pinyin;
-    if(Object.prototype.hasOwnProperty.call(incoming,"meaning")) updated.meaning = incoming.meaning;
-    if(Object.prototype.hasOwnProperty.call(incoming,"example")) updated.example = incoming.example;
-    if(Object.prototype.hasOwnProperty.call(incoming,"wrongText")) updated.wrongText = incoming.wrongText;
-    wordList[localIndex] = updated;
+    if(fullOverride){
+      wordList[localIndex] = {...incoming};
+    }else{
+      const local = wordList[localIndex];
+      const updated = {...local};
+      if(Object.prototype.hasOwnProperty.call(incoming,"pinyin")) updated.pinyin = incoming.pinyin;
+      if(Object.prototype.hasOwnProperty.call(incoming,"meaning")) updated.meaning = incoming.meaning;
+      if(Object.prototype.hasOwnProperty.call(incoming,"example")) updated.example = incoming.example;
+      if(Object.prototype.hasOwnProperty.call(incoming,"wrongText")) updated.wrongText = incoming.wrongText;
+      wordList[localIndex] = updated;
+    }
     return {isNew:false,skip:false};
   } else {
     wordList.push({
@@ -419,10 +460,8 @@ function mergeImportItem(incoming) {
       meaning: Object.prototype.hasOwnProperty.call(incoming,"meaning") ? incoming.meaning : "",
       example: Object.prototype.hasOwnProperty.call(incoming,"example") ? incoming.example : "",
       wrongText: Object.prototype.hasOwnProperty.call(incoming,"wrongText") ? incoming.wrongText : "",
-      level: 0,
-      failCount: 0,
-      createTime: now.toISOString(),
-      nextReview: now.toISOString()
+      level: 0, failCount: 0,
+      createTime: now.toISOString(), nextReview: now.toISOString()
     });
     return {isNew:true,skip:false};
   }
@@ -436,16 +475,10 @@ function addSingleWord(){
   if(!w) return alert("请输入词语");
   if(wordList.some(x=>x.word===w)) return alert("该词语已存在");
   const now=new Date();
-  wordList.push({
-    word:w,pinyin:py,meaning:meaning,example:example,wrongText:wrong,
-    level:0,failCount:0,createTime:now.toISOString(),nextReview:now.toISOString()
-  })
+  wordList.push({word:w,pinyin:py,meaning:meaning,example:example,wrongText:wrong,level:0,failCount:0,createTime:now.toISOString(),nextReview:now.toISOString()})
   saveData();
-  document.getElementById("inpWord").value="";
-  document.getElementById("inpPinyin").value="";
-  document.getElementById("inpMeaning").value="";
-  document.getElementById("inpExample").value="";
-  document.getElementById("inpWrong").value="";
+  document.getElementById("inpWord").value="";document.getElementById("inpPinyin").value="";
+  document.getElementById("inpMeaning").value="";document.getElementById("inpExample").value="";document.getElementById("inpWrong").value="";
   alert("添加成功，该词条已进入今日复习队列");
 }
 function batchAddWords(){
@@ -457,26 +490,20 @@ function batchAddWords(){
     let word,pinyin="",meaning="",example="";
     if(line.indexOf("|")>-1){
       const parts = line.split("|").map(p=>p.trim());
-      word = parts[0]||"";
-      pinyin = parts[1]||"";
-      meaning = parts[2]||"";
-      example = parts[3]||"";
-    }else{
-      word = line;
-    }
+      word = parts[0]||""; pinyin = parts[1]||""; meaning = parts[2]||""; example = parts[3]||"";
+    }else{ word = line; }
     word = word.trim();
     if(!word) return;
-    const res = mergeImportItem({word,pinyin,meaning,example});
+    const res = mergeImportItem({word,pinyin,meaning,example}, false);
     if(res.skip) return;
-    if(res.isNew) add++;
-    else update++;
+    if(res.isNew) add++; else update++;
   })
   saveData();
   document.getElementById("batchText").value="";
   alert(`完成：新增${add}条，更新已有词条${update}条`);
 }
 
-//====修改后的渲染列表，带搜索过滤====
+//修复删除：通过词语精确匹配获取真实下标，搜索过滤列表也可以正常删除
 function renderLibPreview(){
   const pre = document.getElementById("libPreview");
   const searchText = (document.getElementById("libSearchInput")?.value || "").trim().toLowerCase();
@@ -489,20 +516,17 @@ function renderLibPreview(){
         || (item.meaning||"").toLowerCase().includes(searchText);
     })
   }
-  if(filtered.length===0){
-    pre.innerHTML="<div class='tip'>暂无匹配词条</div>";
-    return;
-  }
+  if(filtered.length===0){ pre.innerHTML="<div class='tip'>暂无匹配词条</div>"; return; }
   let html = "";
   filtered.forEach((item)=>{
-    const realIdx = wordList.indexOf(item);
+    //按词语查找真实下标，不再依赖对象引用
+    const realIdx = wordList.findIndex(originItem=> originItem.word === item.word);
     html += `
     <div class="word-item">
       <div class="word-info">
         <div><strong>${item.word}</strong>【${item.pinyin||"无拼音"}】 level:${item.level} 答错:${item.failCount}</div>
         <div style="font-size:13px;color:#555">释义：${item.meaning||"—"}</div>
         <div>例句：${item.example||"—"}</div>
-        <div style="font-size:13px;color:#555">易错：${item.wrongText||"—"}</div>
       </div>
       <div class="word-btn-group">
         <button class="btn-small btn-outline" onclick="openEditModal(${realIdx})">编辑</button>
@@ -513,7 +537,6 @@ function renderLibPreview(){
   })
   pre.innerHTML = html;
 }
-
 function deleteWord(index){
   const item = wordList[index];
   if(!confirm(`确定要删除词条【${item.word}】吗？删除后不可恢复！`)) return;
@@ -531,9 +554,7 @@ function openEditModal(index){
   document.getElementById("editLevel").value = item.level ?? 0;
   document.getElementById("editModal").style.display="flex";
 }
-function closeEditModal(){
-  document.getElementById("editModal").style.display="none";
-}
+function closeEditModal(){ document.getElementById("editModal").style.display="none"; }
 function saveEdit(){
   const idx = Number(document.getElementById("editIndex").value);
   const newWord = document.getElementById("editWord").value.trim();
@@ -562,16 +583,13 @@ document.getElementById("inJson").onchange = async function (e) {
     if (!Array.isArray(arr)) throw new Error("需要数组格式");
     let updateCount = 0, addCount = 0;
     arr.forEach(item => {
-      const res = mergeImportItem(item);
+      const res = mergeImportItem(item, true);
       if(res.skip) return;
-      if(res.isNew) addCount++;
-      else updateCount++;
+      if(res.isNew) addCount++; else updateCount++;
     });
     saveData();
-    alert(`导入完成：新增${addCount}条，更新已有词条${updateCount}条`);
-  } catch (err) {
-    alert("JSON解析失败：" + err.message);
-  }
+    alert(`JSON导入完成：新增${addCount}条，覆盖更新已有词条${updateCount}条`);
+  } catch (err) { alert("JSON解析失败：" + err.message); }
   this.value = "";
 };
 document.getElementById("inExcel").onchange = function (e) {
@@ -592,10 +610,9 @@ document.getElementById("inExcel").onchange = function (e) {
       if(row.meaning !== undefined || row["释义"] !== undefined) incoming.meaning = row.meaning ?? row["释义"];
       if(row.example !== undefined || row["例句"] !== undefined) incoming.example = row.example ?? row["例句"];
       if(row.wrongText !== undefined || row["易错提示"] !== undefined) incoming.wrongText = row.wrongText ?? row["易错提示"];
-      const res = mergeImportItem(incoming);
+      const res = mergeImportItem(incoming, false);
       if(res.skip) return;
-      if(res.isNew) addCount++;
-      else updateCount++;
+      if(res.isNew) addCount++; else updateCount++;
     });
     saveData();
     alert(`Excel导入完成：新增${addCount}条，更新已有词条${updateCount}条`);
@@ -607,9 +624,7 @@ function exportJson(){
   const blob = new Blob([JSON.stringify(wordList,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "wordlib.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
+  a.download = "wordlib.json"; a.click(); URL.revokeObjectURL(a.href);
 }
 function exportExcel(){
   const ws = XLSX.utils.json_to_sheet(wordList);
@@ -618,15 +633,17 @@ function exportExcel(){
   XLSX.writeFile(wb,"wordlib.xlsx");
 }
 function startBatchReview(){
-  batchReviewItems = getDueWords().map(it=>({...it,marked:null}));
+  const maxCnt = Number(document.getElementById("maxReviewCnt").value)||20;
+  const allDue = getDueWords();
+  batchReviewItems = allDue.slice(0, maxCnt).map(it=>({...it,marked:true})); // 默认全部标记为答对 true
+  isAnswerShown = false; //重置答案显示状态
   const tipEl = document.getElementById("reviewTip");
   const panel = document.getElementById("reviewBatchPanel");
+  document.getElementById("topAnswerWrap").style.display="none";
   if(batchReviewItems.length===0){
-    tipEl.innerText = "暂无待复习词条";
-    panel.style.display = "none";
-    return;
+    tipEl.innerText = "暂无待复习词条"; panel.style.display = "none"; return;
   }
-  tipEl.innerText = `待复习共 ${batchReviewItems.length} 条，请在纸上默写，之后逐题批改`;
+  tipEl.innerText = `待复习共 ${batchReviewItems.length} 条，请在纸上默写`;
   panel.style.display = "block";
   renderBatchReview();
 }
@@ -641,52 +658,71 @@ function renderBatchReview(){
       ${item.example ? `<div class="review-example">${item.example}</div>`:""}
       <div class="review-answer" id="ans-${bIdx}">答案：${item.word}</div>
       <div class="review-buttons">
-        <button class="btn-green btn-small" onclick="markOk(${bIdx})">✅答对</button>
-        <button class="btn-red btn-small" onclick="markFail(${bIdx})">❌答错</button>
-        <span class="done-tag" id="tag-${bIdx}"></span>
+        <button class="btn-green btn-small">✅答对</button>
+        <button class="btn-red btn-small">❌答错</button>
       </div>
     </div>
     `
   })
   wrap.innerHTML = html;
 }
-function markOk(bIdx){
-  batchReviewItems[bIdx].marked = true;
-  document.getElementById(`tag-${bIdx}`).innerText = "已标记：答对";
+
+// 渲染顶部汇总答案列表
+function renderTopAnswerList(){
+  const box = document.getElementById("topAnswerList");
+  let html = "";
+  batchReviewItems.forEach((item,bIdx)=>{
+    const cls = item.marked ? "top-answer-item" : "top-answer-item wrong";
+    html += `<span class="${cls}" data-bidx="${bIdx}" onclick="toggleMark(${bIdx})">${bIdx+1}.${item.word}</span>`;
+  })
+  box.innerHTML = html;
 }
-function markFail(bIdx){
-  batchReviewItems[bIdx].marked = false;
-  document.getElementById(`tag-${bIdx}`).innerText = "已标记：答错";
+
+// 切换对错标记 true=答对 false=答错
+function toggleMark(bIdx){
+  batchReviewItems[bIdx].marked = !batchReviewItems[bIdx].marked;
+  renderTopAnswerList();
 }
+
 function showAllAnswer(){
+  document.getElementById("topAnswerWrap").style.display="block";
+  renderTopAnswerList();
   batchReviewItems.forEach((_,i)=>{
     document.getElementById(`ans-${i}`).style.display="block";
   })
+  isAnswerShown = true;
 }
 function hideAllAnswer(){
+  document.getElementById("topAnswerWrap").style.display="none";
   batchReviewItems.forEach((_,i)=>{
     document.getElementById(`ans-${i}`).style.display="none";
   })
+  isAnswerShown = false;
 }
+
 function finishMarkedReview(){
-  const markedItems = batchReviewItems.filter(x=>x.marked !== null);
-  if(markedItems.length === 0){
-    return alert("还没有任何词条标记答对/答错，请至少标记一条再保存。");
+  //保护逻辑：没有显示全部答案，禁止保存
+  if(!isAnswerShown){
+    alert("⚠️请先点击【显示全部答案】，标记完对错之后，才可以保存批改结果！");
+    return;
+  }
+  if(batchReviewItems.length ===0){
+    return alert("没有待批改词条");
   }
   const nowTs = Date.now();
   let okCnt = 0,failCnt = 0;
-  markedItems.forEach(bItem=>{
+  batchReviewItems.forEach(bItem=>{
     const mainIdx = wordList.findIndex(w=>w.word === bItem.word);
     if(mainIdx === -1) return;
     if(bItem.marked === true){
+      // 答对，升级level
       wordList[mainIdx].level += 1;
       wordList[mainIdx].level = Math.min(wordList[mainIdx].level,7);
       const lv = wordList[mainIdx].level;
       wordList[mainIdx].nextReview = new Date(nowTs + SRS_INTERVALS[lv]).toISOString();
-      todayDoneCount +=1;
-      saveMeta();
-      okCnt++;
+      todayDoneCount +=1; saveMeta(); okCnt++;
     }else{
+      // 被点击变红：答错，level归0
       wordList[mainIdx].level = 0;
       wordList[mainIdx].failCount +=1;
       wordList[mainIdx].nextReview = new Date(nowTs).toISOString();
@@ -694,9 +730,10 @@ function finishMarkedReview(){
     }
   })
   saveData();
-  alert(`本次保存：答对${okCnt}条，答错${failCnt}条；未标记词条继续留在待复习列表。`);
+  alert(`本次保存：答对${okCnt}条，答错${failCnt}条`);
   startBatchReview();
 }
+
 function getPaperSourceWords(){
   const sel = document.getElementById("paperSource").value;
   if(sel === "due") return getDueWords();
@@ -716,23 +753,16 @@ function openPaperPreview(){
   let html = `<div class="paper-title">看拼音写词语</div>`;
   list.forEach((it,idx)=>{
     html += `<div class="paper-line">${idx+1}. ${it.pinyin}<span class="paper-blank"></span></div>`;
-    if(withEx && it.example){
-      html += `<div class="paper-example">${it.example}</div>`;
-    }
+    if(withEx && it.example){ html += `<div class="paper-example">${it.example}</div>`; }
   })
   if(withAns){
-    html += `<hr style="margin:40px 0;">`;
-    html += `<div class="paper-title">参考答案</div>`;
-    list.forEach((it,idx)=>{
-      html += `<div class="paper-line">${idx+1}. ${it.word}</div>`;
-    })
+    html += `<hr style="margin:40px 0;"><div class="paper-title">参考答案</div>`;
+    list.forEach((it,idx)=>{ html += `<div class="paper-line">${idx+1}. ${it.word}</div>`; })
   }
   cont.innerHTML = html;
   document.getElementById("paperModal").style.display="block";
 }
-function closePaperModal(){
-  document.getElementById("paperModal").style.display="none";
-}
+function closePaperModal(){ document.getElementById("paperModal").style.display="none"; }
 function openPrintWindow(){
   const list = getPaperSourceWords();
   const withEx = document.getElementById("paperWithExample").checked;
@@ -762,30 +792,21 @@ hr{margin:40px 0;}
   })
   if(withAns){
     html += `<hr><div class="title">参考答案</div>`;
-    list.forEach((it,idx)=>{
-      html += `<div class="line">${idx+1}. ${it.word}</div>`;
-    })
+    list.forEach((it,idx)=>{ html += `<div class="line">${idx+1}. ${it.word}</div>`; })
   }
   html += "</body></html>";
-  iframeDoc.open();
-  iframeDoc.write(html);
-  iframeDoc.close();
+  iframeDoc.open(); iframeDoc.write(html); iframeDoc.close();
   document.getElementById("printModal").style.display="block";
 }
 document.getElementById("triggerPrintBtn").onclick = function(){
   const iframe = document.getElementById("printIframe");
   iframe.contentWindow.print();
 }
-function closePrintModal(){
-  document.getElementById("printModal").style.display="none";
-}
+function closePrintModal(){ document.getElementById("printModal").style.display="none"; }
 window.onload = async function(){
   await loadDictJson();
   loadData();
-  //绑定搜索输入实时刷新列表
-  document.getElementById("libSearchInput")?.addEventListener("input",()=>{
-    renderLibPreview();
-  })
+  document.getElementById("libSearchInput")?.addEventListener("input",()=>{ renderLibPreview(); })
 }
 </script>
 </body>
